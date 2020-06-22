@@ -626,8 +626,12 @@ function CEPGP_calcGP(link, quantity, id)
 	end
 end
 
+function CEPGP_isGPTooltip()
+    return CEPGP_gp_tooltips
+end
+
 function CEPGP_addGPTooltip(frame)
-	if not CEPGP_gp_tooltips or not frame:GetItem() or frame:GetItem() == nil or frame:GetItem() == "" then return; end
+	if not CEPGP_isGPTooltip() or not frame:GetItem() or frame:GetItem() == nil or frame:GetItem() == "" then return; end
 	local _, link = frame:GetItem();
 	local id = CEPGP_getItemID(CEPGP_getItemString(link));
 	if not CEPGP_itemExists(tonumber(id)) then return; end
@@ -646,7 +650,7 @@ function CEPGP_addGPTooltip(frame)
 end
 
 function CEPGP_addGPHyperlink(self, iString)
-	if not string.find(iString, "item:") or not CEPGP_gp_tooltips then return; end
+	if not string.find(iString, "item:") or not CEPGP_isGPTooltip() then return; end
 	local id = CEPGP_getItemID(iString);
 	local name = GetItemInfo(id);
 	for i = 1, ItemRefTooltip:NumLines() do
