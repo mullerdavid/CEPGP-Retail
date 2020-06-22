@@ -590,6 +590,37 @@ function CEPGP_minThresholdChange(self, value)
 	CEPGP_print("Minimum auto show threshold is now set to " .. self:GetText());
 end
 
+		--[[ Tooltip Modifier DropDown ]]--
+		
+function CEPGP_TooltipModifierDropdown(frame, level, menuList)
+	local modifiers = {
+		[1] = "None",
+		[2] = "Alt",
+		[3] = "Shift",
+		[4] = "Ctrl"
+	};
+	for index, value in ipairs(modifiers) do
+		local info = {
+			text = value,
+			value = index,
+			func = CEPGP_TooltipModifierChange
+		};
+		local entry = UIDropDownMenu_AddButton(info);
+	end
+	for i = 1, #modifiers do
+		if string.lower(CEPGP_gp_tooltips_modifier) == string.lower(modifiers[i]) then
+			UIDropDownMenu_SetSelectedName(CEPGP_interface_options_tooltips_modifier, modifiers[i]);
+		end
+	end
+end
+
+function CEPGP_TooltipModifierChange(self, value)
+	UIDropDownMenu_SetSelectedName(CEPGP_interface_options_tooltips_modifier, self:GetText());
+	CEPGP_gp_tooltips_modifier = self:GetText();
+	-- CEPGP.Channel = self:GetText();
+	CEPGP_print("Tooltip modifier set to \"" .. CEPGP_gp_tooltips_modifier .. "\".");
+end
+
 		--[[ Default Channel DropDown ]]--
 		
 function CEPGP_defChannelDropdown(frame, level, menuList)

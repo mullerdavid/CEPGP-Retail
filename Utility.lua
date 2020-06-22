@@ -628,6 +628,10 @@ end
 
 function CEPGP_addGPTooltip(frame)
 	if not CEPGP_gp_tooltips or not frame:GetItem() or frame:GetItem() == nil or frame:GetItem() == "" then return; end
+	if (CEPGP_gp_tooltips_modifier == "Alt" and not IsAltKeyDown()) or (CEPGP_gp_tooltips_modifier == "Shift" and not IsShiftKeyDown()) or (CEPGP_gp_tooltips_modifier == "Ctrl" and not IsControlKeyDown())
+	then 
+		return
+	end
 	local _, link = frame:GetItem();
 	local id = CEPGP_getItemID(CEPGP_getItemString(link));
 	if not CEPGP_itemExists(tonumber(id)) then return; end

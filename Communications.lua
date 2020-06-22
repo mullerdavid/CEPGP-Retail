@@ -379,11 +379,6 @@ function CEPGP_IncAddonMsg(message, sender)
 												else
 													CEPGP_SendAddonMsg(target..";impresponse;CEPGP_raid_wide_dist;false", lane);
 												end
-												if CEPGP_gp_tooltips then
-													CEPGP_SendAddonMsg(target..";impresponse;CEPGP_gp_tooltips;true", lane);
-												else
-													CEPGP_SendAddonMsg(target..";impresponse;CEPGP_gp_tooltips;false", lane)
-												end
 												if CEPGP_suppress_announcements then
 													CEPGP_SendAddonMsg(target..";impresponse;CEPGP_suppress_announcements;true", lane);
 												else
@@ -717,15 +712,6 @@ function CEPGP_IncAddonMsg(message, sender)
 				else
 					CEPGP_raid_wide_dist = false;
 					CEPGP.Loot.RaidVisibility = false;
-				end
-			
-			elseif option == "CEPGP_gp_tooltips" then
-				if args[4] == "true" then
-					CEPGP_gp_tooltips = true;
-					CEPGP.GP.Tooltips = true;
-				else
-					CEPGP_gp_tooltips = false;
-					CEPGP.GP.Tooltips = false;
 				end
 			
 			elseif option == "CEPGP_suppress_announcements" then

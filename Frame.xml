@@ -5740,6 +5740,7 @@
 						</Anchor>
 					</Anchors>
 				</FontString>
+				<FontString name="$parent_tooltips_text" inherits="GameFontNormal" text="GP Values on Tooltips:" />
 				<FontString name="$parent_force_sync" inherits="GameFontNormal" text="Allow Forced Synchronisation from Rank:" />
 				<FontString name="$parent_def_channel_text" inherits="GameFontNormal" text="Reporting Channel:" />
 				<FontString name="$parent_poll_rate_text" inherits="GameFontNormal" text="Roster Polling Rate:" />
@@ -5806,6 +5807,66 @@
 					</OnLeave>
 				</Scripts>
 			</Button>
+			<CheckButton name="$parent_tooltips_check" inherits="UIOptionsCheckButtonTemplate">
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="0" />
+				</HitRectInsets>
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_tooltips_text">
+						<Offset>
+							<AbsDimension x="5" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if self:GetChecked() then
+							CEPGP_gp_tooltips = true;
+							CEPGP.GP.Tooltips = true;
+							CEPGP_print("Enabled GP values on tooltips.");
+						else
+							CEPGP_gp_tooltips = false;
+							CEPGP.GP.Tooltips = false;
+							CEPGP_print("Disabled GP values on tooltips");
+						end
+					</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
+						GameTooltip:SetText("Shows GP values on tooltips based on your current GP formula.");
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnShow>
+						if CEPGP_gp_tooltips then
+							self:SetChecked(true);
+						else
+							self:SetChecked(false);
+						end
+					</OnShow>
+				</Scripts>
+			</CheckButton>
+			<Button name="$parent_tooltips_modifier" inherits="UIDropDownMenuTemplate">
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_tooltips_check" />
+				</Anchors>
+				<Scripts>
+					<OnShow>
+						UIDropDownMenu_SetWidth(self, 140);
+						CEPGP_TooltipModifierDropdown();
+					</OnShow>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
+						GameTooltip:SetText("Sets the modifier for tooltips to show up.");
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnLoad>
+						CEPGP_initDropdown(self, CEPGP_TooltipModifierDropdown);
+					</OnLoad>
+				</Scripts>
+			</Button>
 			<CheckButton name="$parent_forced_sync_check" inherits="UIOptionsCheckButtonTemplate">
 				<HitRectInsets>
 					<AbsInset left="0" right="0" top="0" bottom="0" />
@@ -5867,9 +5928,9 @@
 					</OnLoad>
 				</Scripts>
 			</Button>
-			<Button name="$parent_force_sync_button" inherits="GameMenuButtonTemplate" text="Force Synchronise">
+			<Button name="$parent_force_sync_button" inherits="GameMenuButtonTemplate" text="Force Sync">
 				<Size>
-					<AbsDimension x="150" y="21" />
+					<AbsDimension x="100" y="21" />
 				</Size>
 				<Anchors>
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_forced_sync_rank" />
@@ -6022,7 +6083,8 @@
 			<OnShow>
 				local frame = self:GetName();
 				
-				_G[frame .. "_force_sync"]:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 10, 20);
+				_G[frame .. "_tooltips_text"]:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 10, 20);
+				_G[frame .. "_force_sync"]:SetPoint("BOTTOMLEFT", _G[frame.."_tooltips_text"], "TOPLEFT", 0, 20);
 				_G[frame .. "_def_channel_text"]:SetPoint("BOTTOMLEFT", _G[frame.."_force_sync"], "TOPLEFT", 0, 20);
 				_G[frame .. "_poll_rate_text"]:SetPoint("BOTTOMLEFT", _G[frame.."_def_channel_text"], "TOPLEFT", 0, 20);
 				_G[frame .. "_decay_independent_text"]:SetPoint("BOTTOMLEFT", _G[frame.."_poll_rate_text"], "TOPLEFT", 0, 20);
@@ -6036,8 +6098,8 @@
 					_G[frame .. "_force_sync_button"]:Hide();
 				end
 				
-				
-				_G[frame .. "_poll_rate"]:SetText(CEPGP.PollRate);	
+				_G[frame .. "_poll_rate"]:SetText(CEPGP.PollRate);
+				_G[frame .. "_tooltips_check"]:SetChecked(CEPGP.GP.Tooltips);
 			</OnShow>
 		</Scripts>
 	</Frame>
@@ -8417,15 +8479,6 @@
 								</Anchor>
 							</Anchors>
 						</FontString>
-						<FontString name="CEPGP_options_gp_tooltips_text" inherits="GameFontNormal" text="GP Values on Tooltips:">
-							<Color r="1" g="1" b="1" />
-							<Anchors>
-								<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="CEPGP_options_gp_base_decay_factor">
-									<AbsDimension x="0" y="-12" />
-								</Anchor>
-							</Anchors>
-						</FontString>
-						
 					</Layer>
 				</Layers>
 				<Frames>
@@ -8617,45 +8670,6 @@
 							<OnLeave>
 								GameTooltip:Hide();
 							</OnLeave>
-						</Scripts>
-					</CheckButton>
-					<CheckButton name="CEPGP_options_gp_tooltips_check" inherits="UIOptionsCheckButtonTemplate">
-						<HitRectInsets>
-							<AbsInset left="0" right="0" top="0" bottom="0" />
-						</HitRectInsets>
-						<Anchors>
-							<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="CEPGP_options_gp_tooltips_text">
-								<Offset>
-									<AbsDimension x="5" y="0" />
-								</Offset>
-							</Anchor>
-						</Anchors>
-						<Scripts>
-							<OnClick>
-								if self:GetChecked() then
-									CEPGP_gp_tooltips = true;
-									CEPGP.GP.Tooltips = true;
-									CEPGP_print("Enabled GP values on tooltips.");
-								else
-									CEPGP_gp_tooltips = false;
-									CEPGP.GP.Tooltips = false;
-									CEPGP_print("Disabled GP values on tooltips");
-								end
-							</OnClick>
-							<OnEnter>
-								GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
-								GameTooltip:SetText("Shows GP values on tooltips based on your current GP formula.");
-							</OnEnter>
-							<OnLeave>
-								GameTooltip:Hide();
-							</OnLeave>
-							<OnShow>
-								if CEPGP_gp_tooltips then
-									self:SetChecked(true);
-								else
-									self:SetChecked(false);
-								end
-							</OnShow>
 						</Scripts>
 					</CheckButton>
 				</Frames>
@@ -8920,7 +8934,6 @@
 				CEPGP_options_mod_edit:SetText(CEPGP.GP.Mod);
 				CEPGP_options_gp_base_edit:SetText(BASEGP);
 				CEPGP_options_gp_base_decay_check:SetChecked(CEPGP.GP.DecayFactor);
-				CEPGP_options_gp_tooltips_check:SetChecked(CEPGP.GP.Tooltips);
 				
 				for k, v in pairs(SLOTWEIGHTS) do
 					if k ~= "ROBE" and k ~= "EXCEPTION" then

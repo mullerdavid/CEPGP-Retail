@@ -62,6 +62,7 @@ CEPGP_loot_GUI = false;
 CEPGP_auto_pass = false;
 CEPGP_raid_wide_dist = false;
 CEPGP_gp_tooltips = false;
+CEPGP_gp_tooltips_modifier = "None";
 CEPGP_suppress_announcements = false;
 STANDBYPERCENT = 100;
 STANDBYRANKS = {};
