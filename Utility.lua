@@ -353,7 +353,7 @@ function CEPGP_initSavedVars()
 	CEPGP.Loot.Keyword = CEPGP.Loot.Keyword or CEPGP_keyword;
 	CEPGP.Loot.MinThreshold = CEPGP.Loot.MinThreshold or CEPGP_min_threshold or 2;
 	CEPGP.Loot.MinReq = CEPGP.Loot.MinReq or CEPGP_minEP or {false, 0};
-	CEPGP.Loot.RaidVisibility = CEPGP.Loot.RaidVisibility or {[1] = true, [2] = CEPGP_raid_wide_dist[2]};
+	CEPGP.Loot.RaidVisibility = (type(CEPGP.Loot.RaidVisibility) == "boolean" and {[1] = true, [2] = CEPGP_raid_wide_dist[2]}) or CEPGP.Loot.RaidVisibility or CEPGP_raid_wide_dist;
 	
 	CEPGP.Loot.GUI = CEPGP.Loot.GUI or {};
 	
