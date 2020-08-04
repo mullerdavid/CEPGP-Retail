@@ -32,7 +32,6 @@ function CEPGP_handleComms(event, arg1, arg2, response, lootGUID)
 				end
 				return true;
 			end
-			
 			checkRoll(arg2);
 		end
 		
