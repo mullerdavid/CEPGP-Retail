@@ -232,6 +232,15 @@ CEPGP = {
 								["FINGER"] = 0.5,
 								["TRINKET"] = 0.75
 							},
+							RaidModifiers = {
+								["Molten Core"] = 100,
+								["Onyxia's Lair"] = 100,
+								["Blackwing Lair"] = 100,
+								["Zul'Gurub"] = 100,
+								["The Ruins of Ahn'Qiraj"] = 100,
+								["The Temple of Ahn'Qiraj"] = 100,
+								["Naxxramas"] = 100
+							},
 							Tooltips = false,
 	},
 	Loot = {

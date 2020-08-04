@@ -5849,6 +5849,518 @@
 		</Scripts>
 	</Frame>
 	
+	<Frame name="CEPGP_raid_modifiers" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+		<Size x="250" y="300" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="$parent_heading" inherits="GameFontNormalLarge" text="Global Raid GP Modifiers">
+					<Anchors>
+						<Anchor point="TOP" relativePoint="TOP" x="0" y="-15" />
+					</Anchors>
+				</FontString>
+				<FontString name="$parent_description" inherits="GameFontNormalSmall">
+					<Anchors>
+						<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="$parent_heading" y="-10" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parent_close" inherits="UIPanelCloseButton">
+				<Size>
+					<AbsDimension x="28" y="28" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="-6" y="-6" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						PlaySound(799);
+						CEPGP_raid_modifiers:Hide();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<EditBox name="$parent_Molten Core" inherits="InputBoxTemplate">
+				<Size x="50" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="25" y="-100" />
+				</Anchors>
+				<Attributes>
+					<Attribute name="raid" type="string" value="Molten Core" />
+				</Attributes>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parent_value" inherits="GameFontNormalSmall" text="% of Normal Value">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="$parent" x="-10" y="5" />
+							</Anchors>
+						</FontString>
+						<FontString name="$parent_string" inherits="GameFontNormalSmall" text="Molten Core">
+							<Anchors>
+								<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent" x="10" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:SetAutoFocus(false);
+					</OnLoad>
+					<OnShow>
+						local raid = self:GetAttribute("raid");
+						local amount = CEPGP.GP.RaidModifiers[raid];
+						_G[self:GetName() .. "_string"]:SetText(raid);
+						self:SetText(CEPGP.GP.RaidModifiers[raid]);
+					</OnShow>
+					<OnEnterPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEnterPressed>
+					<OnEscapePressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEscapePressed>
+					<OnTabPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+						if IsShiftKeyDown() then
+							_G["CEPGP_raid_modifiers_Naxxramas"]:SetFocus(true);
+						else
+							_G["CEPGP_raid_modifiers_Onyxia's Lair"]:SetFocus(true);
+						end
+					</OnTabPressed>
+					<OnEditFocusLost>
+						local raid = self:GetAttribute("raid");
+						local value = self:GetText();
+						local default = CEPGP.GP.RaidModifiers[raid];
+						
+						if string.find(value, '[^-0-9.]') then
+							self:SetText(default);
+							return;
+						end
+						
+						if value == default then
+							return;
+						end
+						
+						CEPGP.GP.RaidModifiers[raid] = tonumber(value);
+					</OnEditFocusLost>
+				</Scripts>
+			</EditBox>
+			<EditBox name="$parent_Onyxia's Lair" inherits="InputBoxTemplate">
+				<Size x="50" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_Molten Core" y="-10" />
+				</Anchors>
+				<Attributes>
+					<Attribute name="raid" type="string" value="Onyxia's Lair" />
+				</Attributes>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parent_string" inherits="GameFontNormalSmall" text="Onyxia's Lair">
+							<Anchors>
+								<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent" x="10" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:SetAutoFocus(false);
+					</OnLoad>
+					<OnShow>
+						local raid = self:GetAttribute("raid");
+						local amount = CEPGP.GP.RaidModifiers[raid];
+						_G[self:GetName() .. "_string"]:SetText(raid);
+						self:SetText(CEPGP.GP.RaidModifiers[raid]);
+					</OnShow>
+					<OnEnterPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEnterPressed>
+					<OnEscapePressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEscapePressed>
+					<OnTabPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+						
+						if IsShiftKeyDown() then
+							_G["CEPGP_raid_modifiers_Molten Core"]:SetFocus(true);
+						else
+							_G["CEPGP_raid_modifiers_Blackwing Lair"]:SetFocus(true);
+						end
+					</OnTabPressed>
+					<OnEditFocusLost>
+						local raid = self:GetAttribute("raid");
+						local value = self:GetText();
+						local default = CEPGP.GP.RaidModifiers[raid];
+						
+						if string.find(value, '[^-0-9.]') then
+							self:SetText(default);
+							return;
+						end
+						
+						if value == default then
+							return;
+						end
+						
+						CEPGP.GP.RaidModifiers[raid] = tonumber(value);
+					</OnEditFocusLost>
+				</Scripts>
+			</EditBox>
+			<EditBox name="$parent_Blackwing Lair" inherits="InputBoxTemplate">
+				<Size x="50" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_Onyxia's Lair" y="-10" />
+				</Anchors>
+				<Attributes>
+					<Attribute name="raid" type="string" value="Blackwing Lair" />
+				</Attributes>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parent_string" inherits="GameFontNormalSmall" text="Blackwing Lair">
+							<Anchors>
+								<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent" x="10" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:SetAutoFocus(false);
+					</OnLoad>
+					<OnShow>
+						local raid = self:GetAttribute("raid");
+						local amount = CEPGP.GP.RaidModifiers[raid];
+						_G[self:GetName() .. "_string"]:SetText(raid);
+						self:SetText(CEPGP.GP.RaidModifiers[raid]);
+					</OnShow>
+					<OnEnterPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEnterPressed>
+					<OnEscapePressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEscapePressed>
+					<OnTabPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+						
+						if IsShiftKeyDown() then
+							_G["CEPGP_raid_modifiers_Onyxia's Lair"]:SetFocus(true);
+						else
+							_G["CEPGP_raid_modifiers_Zul'Gurub"]:SetFocus(true);
+						end
+					</OnTabPressed>
+					<OnEditFocusLost>
+						local raid = self:GetAttribute("raid");
+						local value = self:GetText();
+						local default = CEPGP.GP.RaidModifiers[raid];
+						
+						if string.find(value, '[^-0-9.]') then
+							self:SetText(default);
+							return;
+						end
+						
+						if value == default then
+							return;
+						end
+						
+						CEPGP.GP.RaidModifiers[raid] = tonumber(value);
+					</OnEditFocusLost>
+				</Scripts>
+			</EditBox>
+			<EditBox name="$parent_Zul'Gurub" inherits="InputBoxTemplate">
+				<Size x="50" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_Blackwing Lair" y="-10" />
+				</Anchors>
+				<Attributes>
+					<Attribute name="raid" type="string" value="Zul'Gurub" />
+				</Attributes>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parent_string" inherits="GameFontNormalSmall" text="Zul'Gurub">
+							<Anchors>
+								<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent" x="10" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:SetAutoFocus(false);
+					</OnLoad>
+					<OnShow>
+						local raid = self:GetAttribute("raid");
+						local amount = CEPGP.GP.RaidModifiers[raid];
+						_G[self:GetName() .. "_string"]:SetText(raid);
+						self:SetText(CEPGP.GP.RaidModifiers[raid]);
+					</OnShow>
+					<OnEnterPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEnterPressed>
+					<OnEscapePressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEscapePressed>
+					<OnTabPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+						
+						if IsShiftKeyDown() then
+							_G["CEPGP_raid_modifiers_Blackwing Lair"]:SetFocus(true);
+						else
+							_G["CEPGP_raid_modifiers_The Ruins of Ahn'Qiraj"]:SetFocus(true);
+						end
+					</OnTabPressed>
+					<OnEditFocusLost>
+						local raid = self:GetAttribute("raid");
+						local value = self:GetText();
+						local default = CEPGP.GP.RaidModifiers[raid];
+						
+						if string.find(value, '[^-0-9.]') then
+							self:SetText(default);
+							return;
+						end
+						
+						if value == default then
+							return;
+						end
+						
+						CEPGP.GP.RaidModifiers[raid] = tonumber(value);
+					</OnEditFocusLost>
+				</Scripts>
+			</EditBox>
+			<EditBox name="$parent_The Ruins of Ahn'Qiraj" inherits="InputBoxTemplate">
+				<Size x="50" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_Zul'Gurub" y="-10" />
+				</Anchors>
+				<Attributes>
+					<Attribute name="raid" type="string" value="The Ruins of Ahn'Qiraj" />
+				</Attributes>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parent_string" inherits="GameFontNormalSmall" text="The Ruins of Ahn'Qiraj">
+							<Anchors>
+								<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent" x="10" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:SetAutoFocus(false);
+					</OnLoad>
+					<OnShow>
+						local raid = self:GetAttribute("raid");
+						local amount = CEPGP.GP.RaidModifiers[raid];
+						_G[self:GetName() .. "_string"]:SetText(raid);
+						self:SetText(CEPGP.GP.RaidModifiers[raid]);
+					</OnShow>
+					<OnEnterPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEnterPressed>
+					<OnEscapePressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEscapePressed>
+					<OnTabPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+						
+						if IsShiftKeyDown() then
+							_G["CEPGP_raid_modifiers_Zul'Gurub"]:SetFocus(true);
+						else
+							_G["CEPGP_raid_modifiers_The Temple of Ahn'Qiraj"]:SetFocus(true);
+						end
+					</OnTabPressed>
+					<OnEditFocusLost>
+						local raid = self:GetAttribute("raid");
+						local value = self:GetText();
+						local default = CEPGP.GP.RaidModifiers[raid];
+						
+						if string.find(value, '[^-0-9.]') then
+							self:SetText(default);
+							return;
+						end
+						
+						if value == default then
+							return;
+						end
+						
+						CEPGP.GP.RaidModifiers[raid] = tonumber(value);
+					</OnEditFocusLost>
+				</Scripts>
+			</EditBox>
+			<EditBox name="$parent_The Temple of Ahn'Qiraj" inherits="InputBoxTemplate">
+				<Size x="50" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_The Ruins of Ahn'Qiraj" y="-10" />
+				</Anchors>
+				<Attributes>
+					<Attribute name="raid" type="string" value="The Temple of Ahn'Qiraj" />
+				</Attributes>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parent_string" inherits="GameFontNormalSmall" text="The Temple of Ahn'Qiraj">
+							<Anchors>
+								<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent" x="10" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:SetAutoFocus(false);
+					</OnLoad>
+					<OnShow>
+						local raid = self:GetAttribute("raid");
+						local amount = CEPGP.GP.RaidModifiers[raid];
+						_G[self:GetName() .. "_string"]:SetText(raid);
+						self:SetText(CEPGP.GP.RaidModifiers[raid]);
+					</OnShow>
+					<OnEnterPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEnterPressed>
+					<OnEscapePressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEscapePressed>
+					<OnTabPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+						
+						if IsShiftKeyDown() then
+							_G["CEPGP_raid_modifiers_The Ruins of Ahn'Qiraj"]:SetFocus(true);
+						else
+							_G["CEPGP_raid_modifiers_Naxxramas"]:SetFocus(true);
+						end
+					</OnTabPressed>
+					<OnEditFocusLost>
+						local raid = self:GetAttribute("raid");
+						local value = self:GetText();
+						local default = CEPGP.GP.RaidModifiers[raid];
+						
+						if string.find(value, '[^-0-9.]') then
+							self:SetText(default);
+							return;
+						end
+						
+						if value == default then
+							return;
+						end
+						
+						CEPGP.GP.RaidModifiers[raid] = tonumber(value);
+					</OnEditFocusLost>
+				</Scripts>
+			</EditBox>
+			<EditBox name="$parent_Naxxramas" inherits="InputBoxTemplate">
+				<Size x="50" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_The Temple of Ahn'Qiraj" y="-10" />
+				</Anchors>
+				<Attributes>
+					<Attribute name="raid" type="string" value="Naxxramas" />
+				</Attributes>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parent_string" inherits="GameFontNormalSmall" text="Naxxramas">
+							<Anchors>
+								<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent" x="10" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:SetAutoFocus(false);
+					</OnLoad>
+					<OnShow>
+						local raid = self:GetAttribute("raid");
+						local amount = CEPGP.GP.RaidModifiers[raid];
+						_G[self:GetName() .. "_string"]:SetText(raid);
+						self:SetText(CEPGP.GP.RaidModifiers[raid]);
+					</OnShow>
+					<OnEnterPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEnterPressed>
+					<OnEscapePressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+					</OnEscapePressed>
+					<OnTabPressed>
+						self:ClearFocus();
+						self:HighlightText(0,0);
+						
+						if IsShiftKeyDown() then
+							_G["CEPGP_raid_modifiers_The Temple of Ahn'Qiraj"]:SetFocus(true);
+						else
+							_G["CEPGP_raid_modifiers_Molten Core"]:SetFocus(true);
+						end
+					</OnTabPressed>
+					<OnEditFocusLost>
+						local raid = self:GetAttribute("raid");
+						local value = self:GetText();
+						local default = CEPGP.GP.RaidModifiers[raid];
+						
+						if string.find(value, '[^-0-9.]') then
+							self:SetText(default);
+							return;
+						end
+						
+						if value == default then
+							return;
+						end
+						
+						CEPGP.GP.RaidModifiers[raid] = tonumber(value);
+					</OnEditFocusLost>
+				</Scripts>
+			</EditBox>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self:RegisterForDrag("LeftButton");
+			</OnLoad>
+			<OnDragStart>
+				self:StartMoving();
+			</OnDragStart>
+			<OnDragStop>
+				self:StopMovingOrSizing();
+			</OnDragStop>
+			<OnShow>
+				local desc = "Change these numbers to adjust\nthe value of all boss and standard\ntrash drops in each raid";
+				_G[self:GetName() .. "_description"]:SetText(desc);
+			</OnShow>
+		</Scripts>
+	</Frame>
+	
 	<Frame name="CEPGP_interface_options" hidden="true">
 		<Anchors>
 			<Anchor point="TOPRIGHT" />
@@ -8498,12 +9010,30 @@
 			</Layer>
 		</Layers>
 		<Frames>
+			<Button name="$parent_raid_override" inherits="GameMenuButtonTemplate" text="Raid Modifiers">
+				<Size x="125" y="21" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="10" y="-10" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CEPGP_raid_modifiers:Show();
+					</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
+						GameTooltip:SetText("Apply a GP modifier for items in each raid");
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</Button>
 			<Button name="CEPGP_button_options_CEPGP_override" inherits="GameMenuButtonTemplate" text="Override Settings">
 				<Size>
 					<AbsDimension x="125" y="21" />
 				</Size>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="CEPGP_interface_options_changelog">
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_raid_override">
 						<Offset>
 							<AbsDimension x="0" y="0" />
 						</Offset>

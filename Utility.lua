@@ -197,6 +197,7 @@ function CEPGP_initialise()
 		tinsert(UISpecialFrames, "CEPGP_traffic");
 		tinsert(UISpecialFrames, "CEPGP_changelog");
 		tinsert(UISpecialFrames, "CEPGP_license");
+		tinsert(UISpecialFrames, "CEPGP_raid_modifiers");
 		
 		CEPGP_SendAddonMsg("version-check", "GUILD");
 		for i, t in ipairs(bossNames) do
@@ -342,6 +343,22 @@ function CEPGP_initSavedVars()
 	end
 	
 	CEPGP.Overrides = CEPGP.Overrides or OVERRIDE_INDEX or {};
+	
+	CEPGP.GP.RaidModifiers = CEPGP.GP.RaidModifiers or {};
+	
+	local RaidModifiers = {
+		["Molten Core"] = 100,
+		["Onyxia's Lair"] = 100,
+		["Blackwing Lair"] = 100,
+		["Zul'Gurub"] = 100,
+		["The Ruins of Ahn'Qiraj"] = 100,
+		["The Temple of Ahn'Qiraj"] = 100,
+		["Naxxramas"] = 100
+	};
+	
+	for raid, val in pairs(RaidModifiers) do
+		CEPGP.GP.RaidModifiers[raid] = CEPGP.GP.RaidModifiers[raid] or val;
+	end
 	
 	--[[	Loot Management	]]--
 	
@@ -688,8 +705,19 @@ function CEPGP_calcGP(link, quantity, id)
 		slot = strsub(slot,strfind(slot,"INVTYPE_")+8,string.len(slot));
 		slot = SLOTWEIGHTS[slot];
 		
+		local raidScaling = 1;
+		
+		for raid, data in pairs(CEPGP_ItemDomain) do
+			for _, _id in pairs(data) do
+				if tonumber(id) == _id then
+					raidScaling = CEPGP.GP.RaidModifiers[raid]/100;
+					break;
+				end
+			end
+		end
+		
 		if ilvl and rarity and slot then
-			return math.floor((((COEF * (MOD_COEF^((ilvl/26) + (rarity-4))) * slot)*MOD)*quantity));
+			return math.floor((((COEF * (MOD_COEF^((ilvl/26) + (rarity-4))) * slot)*MOD)*quantity)*raidScaling);
 		else
 			return 0;
 		end

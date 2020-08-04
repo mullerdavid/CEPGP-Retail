@@ -350,7 +350,7 @@ function CEPGP_handleLoot(event, arg1, arg2)
 			CEPGP_UpdateLootScrollBar();
 		end
 		
-	elseif event == "LOOT_OPENED" then --and (UnitInRaid("player") or CEPGP_Info.Debug) then
+	elseif event == "LOOT_OPENED" and (UnitInRaid("player") or CEPGP_Info.Debug) then
 		CEPGP_Info.IgnoreUpdates = true;	--	Prevents the CEPGP roster from rebuilding while distributing loot
 		CEPGP_LootFrame_Update();
 		ShowUIPanel(CEPGP_button_loot_dist);
