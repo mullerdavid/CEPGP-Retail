@@ -88,7 +88,7 @@ CEPGP_EncounterInfo = {
 		["High Priestess Mar'li"] = 2,
 		["High Priest Thekal"] = 2,
 		["High Priestess Arlokk"] = 2,
-		["The Edge of Madness"] = 2,
+		["Edge of Madness"] = 2,
 		["Bloodlord Mandokir"] = 2,
 		["Jin'do the Hexxer"] = 2,
 		["Gahz'ranka"] = 2,
@@ -131,7 +131,7 @@ CEPGP_EncounterInfo = {
 		["Sapphiron"] = 15,
 		["Kel'Thuzad"] = 15,
 
-		["Doom Lord Kazzak"] = 7,
+		["Lord Kazzak"] = 7,
 		["Azuregos"] = 7,
 		["Emeriss"] = 7,
 		["Lethon"] = 7,

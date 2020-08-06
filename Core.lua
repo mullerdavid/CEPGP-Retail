@@ -208,7 +208,7 @@ CEPGP = {
 							Min = 1,
 							Mod = 1,
 							Multiplier = 2,
-								SlotWeights = {
+							SlotWeights = {
 								["2HWEAPON"] = 2,
 								["WEAPONMAINHAND"] = 1.5,
 								["WEAPON"] = 1.5,
@@ -382,10 +382,9 @@ function CEPGP_OnEvent(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, ar
 	
 	elseif (event == "CHAT_MSG_ADDON") or (event == "CHAT_MSG_ADDON_LOGGED") then
 		if (arg1 == "CEPGP")then
-			if string.find(arg4, "-") then
-				arg4 = string.sub(arg4, 0, string.find(arg4, "-")-1);
-			end
-			CEPGP_IncAddonMsg(arg2, arg4);
+			local channel = arg3;
+			local player = arg5;
+			CEPGP_IncAddonMsg(arg2, arg5, arg3);
 		end
 		return;
 	end
