@@ -2437,7 +2437,7 @@
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString name="CEPGP_settings_import_header" inherits="GameFontNormal" text="Overwrite Settings">
+				<FontString name="CEPGP_settings_import_header" inherits="GameFontNormal" text="Import Settings">
 					<Anchors>
 						<Anchor point="TOP">
 							<Offset>
