@@ -562,6 +562,10 @@ function CEPGP_initDropdown(frame, initFunction, displayMode, level, menuList)
 	UIDropDownMenu_SetDisplayMode(frame, displayMode);
 end
 
+function CEPGP_ContainsIllegalChar(str)
+	return string.find(str, '[^a-zA-ZÀÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ]');
+end
+
 function CEPGP_addResponse(player, response, roll)
 	if response and not tonumber(response) then
 		response = CEPGP_getResponseIndex(response);

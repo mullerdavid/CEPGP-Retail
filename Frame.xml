@@ -2582,7 +2582,7 @@
 							return;
 						end
 						
-						if string.find(name, '[^a-zA-Z]') then
+						if CEPGP_ContainsIllegalChar(name) then
 							CEPGP_print("Found an invalid character (i.e. a space, comma, etc..) in the name you provided. Please remove the invalid character and try again.", true);
 							return;
 						end
