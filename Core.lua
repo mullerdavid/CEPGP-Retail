@@ -39,7 +39,7 @@ CEPGP_rate = 1;
 CEPGP_plugins = {};
 
 --[[ SAVED VARIABLES ]]--
-CHANNEL = "Guild";
+--[[CHANNEL = "Guild";
 CEPGP_lootChannel = "Raid";
 MOD = 1;
 COEF = 4.83;
@@ -77,7 +77,7 @@ CEPGP_minEP = {false, 0};
 CEPGP_response_buttons = {[1]={true, "Main Spec", 0, "Need"},[2]={false, "Off Spec", 0, "Greed"},[3]={false, "Disenchant", 0, "Disenchant"},[4]={false, "Minor Upgrade", 0, "Minor"},[5]={false, "", 0},[6]={false, "Pass", 100}};
 CEPGP_response_time = 0;
 CEPGP_show_passes = false;
-CEPGP_PR_sort = true;
+CEPGP_PR_sort = true;]]
 
 CEPGP_Info = {
 	Version = 				"1.12.24",
@@ -178,8 +178,8 @@ CEPGP_Info = {
 	}
 };
 
-CEPGP = {
-	Attendance = 			CEPGP_raid_logs,
+CEPGP = {};
+	--[[Attendance = 			CEPGP_raid_logs,
 	Backups = 				RECORDS,
 	Channel = 				CHANNEL,
 	Exclusions = 			{false,false,false,false,false,false,false,false,false,false},
@@ -276,7 +276,7 @@ CEPGP = {
 							Roster = CEPGP_standbyRoster,
 							Share = CEPGP_standby_share,
 	}
-}
+}]]
 
 local L = CEPGP_Locale:GetLocale("CEPGP")
 
