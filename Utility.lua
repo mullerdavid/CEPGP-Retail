@@ -303,6 +303,7 @@ function CEPGP_initSavedVars()
 	CEPGP.PollRate = CEPGP.PollRate or 0.0001;
 	CEPGP.Sync = CEPGP.Sync or {ALLOW_FORCED_SYNC, CEPGP_force_sync_rank} or {false, 1};
 	CEPGP.Decay = CEPGP.Decay or {Separate = false};
+	--CEPGP.Log = {};
 	
 	--[[	Guild Frame		]]--
 	
@@ -751,9 +752,9 @@ function CEPGP_calcGP(link, quantity, id)
 				CEPGP_print("Slot: " .. slot);
 			end
 			slot = strsub(slot,strfind(slot,"INVTYPE_")+8,string.len(slot));
-			slot = SLOTWEIGHTS[slot];
+			slot = CEPGP.GP.SlotWeights[slot];
 			if ilvl and rarity and slot then
-				return math.floor((((COEF * (MOD_COEF^((ilvl/26) + (rarity-4))) * slot)*MOD)*quantity));
+				return math.floor((((CEPGP.GP.Base * (CEPGP.GP.Multiplier^((ilvl/26) + (rarity-4))) * slot)*CEPGP.GP.Mod)*quantity)*raidScaling);
 			else
 				return 0;
 			end
@@ -804,7 +805,7 @@ function CEPGP_calcGP(link, quantity, id)
 			CEPGP_print("Slot: " .. slot);
 		end
 		slot = strsub(slot,strfind(slot,"INVTYPE_")+8,string.len(slot));
-		slot = SLOTWEIGHTS[slot];
+		slot = CEPGP.GP.SlotWeights[slot];
 		
 		local raidScaling = 1;
 		
@@ -818,7 +819,7 @@ function CEPGP_calcGP(link, quantity, id)
 		end
 		
 		if ilvl and rarity and slot then
-			return math.floor((((COEF * (MOD_COEF^((ilvl/26) + (rarity-4))) * slot)*MOD)*quantity)*raidScaling);
+			return math.floor((((CEPGP.GP.Base * (CEPGP.GP.Multiplier^((ilvl/26) + (rarity-4))) * slot)*CEPGP.GP.Mod)*quantity)*raidScaling);
 		else
 			return 0;
 		end

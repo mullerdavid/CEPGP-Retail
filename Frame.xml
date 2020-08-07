@@ -1092,6 +1092,27 @@
 		</Scripts>
 	</Frame>
 	
+	<Frame name="CEPGP_log" enableMouse="true" hidden="true" movable="true" clampedToScreen="true">
+		<Size y="250" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Frames>
+			<ScrollFrame>
+				<Size y="250" />
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+				</Anchors>
+				<ScrollChild>
+					<Frame>
+						<Size y="250" />
+					</Frame>
+				</ScrollChild>
+			</ScrollFrame>
+		</Frames>
+		
+	</Frame>
+	
 	<Frame name="CEPGP_version" enableMouse="true" hidden="true" movable="true" parent="UIParent" clampedToScreen="true">
 		<Size>
 			<AbsDimension x="450" y="450" />

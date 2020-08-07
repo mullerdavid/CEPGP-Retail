@@ -1,6 +1,10 @@
 local L = CEPGP_Locale:GetLocale("CEPGP")
 
 function CEPGP_IncAddonMsg(message, sender, channel)
+	if sender ~= UnitName("player") then
+	--	table.insert(CEPGP.Logs, {time(), sender, message});
+	end
+	
 	local args = CEPGP_split(message, ";"); -- The broken down message, delimited by semi-colons
 	if sender == UnitName("player") then
 		for i = 1, #CEPGP_Info.MessageStack do
