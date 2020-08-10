@@ -2,7 +2,7 @@ local L = CEPGP_Locale:GetLocale("CEPGP")
 
 function CEPGP_IncAddonMsg(message, sender, channel)
 	if sender ~= UnitName("player") then
-	--	table.insert(CEPGP.Logs, {time(), sender, message});
+		table.insert(CEPGP.Log, {time(), "received", sender, UnitName("player"), message, channel});	--	os.time, time since pc turned on (useful for millisecond precision)
 	end
 	
 	local args = CEPGP_split(message, ";"); -- The broken down message, delimited by semi-colons
@@ -765,158 +765,165 @@ function CEPGP_ExportConfig(option, player)
 		end
 	end);
 	
-	if not success then CEPGP_print(failMsg); end
+	if not success then
+		CEPGP_print("A problem was encountered while sending your configuration to " .. (player and player or "the Guild"), true);
+		CEPGP_print(failMsg);
+	end
 end
 
 function CEPGP_OverwriteOption(args, sender, channel)
 	if sender == UnitName("player") then return; end
-	if channel == "GUILD" then
-		local rank = select(4, CEPGP_getGuildInfo(sender));
-		if not rank then return; end
-		if rank + 1 > CEPGP_force_sync_rank then
-			return;
-		end
-	end
 	
-	local option = args[2];
-	local setting = args[3];
-	
-	
-	local function sanitise(value)
-		if value == "true" then
-			return true;
-		elseif value == "false" then
-			return false;
-		elseif tonumber(value) then
-			return tonumber(value);
-		else
-			return value;
-		end
-	end
-	
-	if option == "Overrides" then
-		local item, GP = args[3], args[4];
-		OVERRIDE_INDEX[item] = GP;	--	Will be updated to new saved var structure when the changeover happens
-		if CEPGP_override:IsVisible() then
-			CEPGP_UpdateOverrideScrollBar();
-		end
-	
-	elseif option == "Alt" then
-		if setting == "Links" then
-			CEPGP.Alt.Links[args[4]] = CEPGP.Alt.Links[args[4]] or {};
-			table.insert(CEPGP.Alt.Links[args[4]], args[5]);
-			if CEPGP_options_alt_mangement:IsVisible() then
-				CEPGP_UpdateAltScrollBar();
+	local success, failMsg = pcall(function()
+		if channel == "GUILD" then
+			local rank = select(4, CEPGP_getGuildInfo(sender));
+			if not rank then return; end
+			if rank + 1 > CEPGP_force_sync_rank then
+				return;
 			end
-		else
-			CEPGP.Alt[setting] = sanitise(args[4]);
 		end
 		
-	elseif option == "Decay" then
-		CEPGP.Decay[setting] = sanitise(args[4]);
-	
-	elseif option == "EP" then
-		local boss = args[4];
-		local state = setting == "BossEP" and tonumber(args[5]) or (args[5] == "true" and true or false);
-		if setting == "AutoAward" then
-			AUTOEP[boss] = state;
-			_G["CEPGP_options_" .. boss .. "_auto_check"]:SetChecked(state);
-		else
-			EPVALS[boss] = state;
-			_G["CEPGP_options_" .. boss .. "_EP_value"]:SetText(state);
-		end
-		CEPGP.EP[setting][boss] = state;
+		local option = args[2];
+		local setting = args[3];
 		
-	elseif option == "GP" then
-		local index;
-		local value;
-		if type(CEPGP.GP[setting]) == "table" then
-			index = args[4];
-			value = args[5];
-			CEPGP.GP[setting][index] = value;
-			if setting == "SlotWeights" then
-				SLOTWEIGHTS[index] = value;
+		
+		local function sanitise(value)
+			if value == "true" then
+				return true;
+			elseif value == "false" then
+				return false;
+			elseif tonumber(value) then
+				return tonumber(value);
+			else
+				return value;
 			end
-		else
-			value = sanitise(args[4]);
-			CEPGP.GP[setting] = value;
 		end
 		
-	elseif option == "Loot" then
-		local value;
-		if type(CEPGP.Loot[setting]) == "table" then
-			if setting == "GUI" then
-				if args[4] == "Buttons" then
-					local index = sanitise(args[5]);
-					local state = sanitise(args[6]);
-					local text = sanitise(args[7]);
-					local discount = sanitise(args[8]);
-					local keyword = sanitise(args[9]);
-					
-					if text then					
-						CEPGP.Loot.GUI.Buttons[index][1] = state;
-						CEPGP_response_buttons[index][1] = state;
-						CEPGP.Loot.GUI.Buttons[index][2] = text;
-						CEPGP_response_buttons[index][2] = text;
-						CEPGP.Loot.GUI.Buttons[index][3] = discount;
-						CEPGP_response_buttons[index][3] = discount;
-						CEPGP.Loot.GUI.Buttons[index][4] = keyword;
-						CEPGP_response_buttons[index][4] = keyword;
-					else
-						CEPGP_print("There was an issue importing data for response button " .. index .. ". You will need to configure this button manually.", true);
-						return;
+		if option == "Overrides" then
+			local item, GP = args[3], args[4];
+			OVERRIDE_INDEX[item] = GP;	--	Will be updated to new saved var structure when the changeover happens
+			if CEPGP_override:IsVisible() then
+				CEPGP_UpdateOverrideScrollBar();
+			end
+		
+		elseif option == "Alt" then
+			if setting == "Links" then
+				CEPGP.Alt.Links[args[4]] = CEPGP.Alt.Links[args[4]] or {};
+				table.insert(CEPGP.Alt.Links[args[4]], args[5]);
+				if CEPGP_options_alt_mangement:IsVisible() then
+					CEPGP_UpdateAltScrollBar();
+				end
+			else
+				CEPGP.Alt[setting] = sanitise(args[4]);
+			end
+			
+		elseif option == "Decay" then
+			CEPGP.Decay[setting] = sanitise(args[4]);
+		
+		elseif option == "EP" then
+			local boss = args[4];
+			local state = setting == "BossEP" and tonumber(args[5]) or (args[5] == "true" and true or false);
+			if setting == "AutoAward" then
+				AUTOEP[boss] = state;
+				_G["CEPGP_options_" .. boss .. "_auto_check"]:SetChecked(state);
+			else
+				EPVALS[boss] = state;
+				_G["CEPGP_options_" .. boss .. "_EP_value"]:SetText(state);
+			end
+			CEPGP.EP[setting][boss] = state;
+			
+		elseif option == "GP" then
+			local index;
+			local value;
+			if type(CEPGP.GP[setting]) == "table" then
+				index = args[4];
+				value = args[5];
+				CEPGP.GP[setting][index] = value;
+				if setting == "SlotWeights" then
+					SLOTWEIGHTS[index] = value;
+				end
+			else
+				value = sanitise(args[4]);
+				CEPGP.GP[setting] = value;
+			end
+			
+		elseif option == "Loot" then
+			local value;
+			if type(CEPGP.Loot[setting]) == "table" then
+				if setting == "GUI" then
+					if args[4] == "Buttons" then
+						local index = sanitise(args[5]);
+						local state = sanitise(args[6]);
+						local text = sanitise(args[7]);
+						local discount = sanitise(args[8]);
+						local keyword = sanitise(args[9]);
+						
+						if text then					
+							CEPGP.Loot.GUI.Buttons[index][1] = state;
+							CEPGP_response_buttons[index][1] = state;
+							CEPGP.Loot.GUI.Buttons[index][2] = text;
+							CEPGP_response_buttons[index][2] = text;
+							CEPGP.Loot.GUI.Buttons[index][3] = discount;
+							CEPGP_response_buttons[index][3] = discount;
+							CEPGP.Loot.GUI.Buttons[index][4] = keyword;
+							CEPGP_response_buttons[index][4] = keyword;
+						else
+							CEPGP_print("There was an issue importing data for response button " .. index .. ". You will need to configure this button manually.", true);
+							return;
+						end
+						
+					elseif args[4] == "Timer" then
+						CEPGP.Loot.GUI.Timer = sanitise(args[5]);
 					end
-					
-				elseif args[4] == "Timer" then
-					CEPGP.Loot.GUI.Timer = sanitise(args[5]);
-				end
-			
-			elseif setting == "ExtraKeywords" then
-				if args[4] == "Enabled" then
-					CEPGP.Loot.ExtraKeywords.Enabled = sanitise(args[5]);
-				else
-					local label = sanitise(args[5]);
-					local keyword = sanitise(args[6]);
-					local discount = sanitise(args[7]);
-					
-					CEPGP.Loot.ExtraKeywords.Keywords[label] = {[keyword] = discount};
-				end
-				if CEPGP_loot_options:IsVisible() then
-					CEPGP_UpdateKeywordScrollBar();
-				end
-			
-			elseif setting == "MinReq" or setting == "RaidVisibility" then
-				args[4] = sanitise(args[4]);
-				args[5] = sanitise(args[5]);
-				value = {args[4], args[5]};
 				
+				elseif setting == "ExtraKeywords" then
+					if args[4] == "Enabled" then
+						CEPGP.Loot.ExtraKeywords.Enabled = sanitise(args[5]);
+					else
+						local label = sanitise(args[5]);
+						local keyword = sanitise(args[6]);
+						local discount = sanitise(args[7]);
+						
+						CEPGP.Loot.ExtraKeywords.Keywords[label] = {[keyword] = discount};
+					end
+					if CEPGP_loot_options:IsVisible() then
+						CEPGP_UpdateKeywordScrollBar();
+					end
+				
+				elseif setting == "MinReq" or setting == "RaidVisibility" then
+					args[4] = sanitise(args[4]);
+					args[5] = sanitise(args[5]);
+					value = {args[4], args[5]};
+					
+					CEPGP.Loot[setting] = value;
+				end
+			else
+				value = sanitise(args[4]);
 				CEPGP.Loot[setting] = value;
 			end
-		else
-			value = sanitise(args[4]);
-			CEPGP.Loot[setting] = value;
+		
+		elseif option == "Standby" then
+			if setting == "Ranks" then
+				local index = sanitise(args[4]);
+				local rank = sanitise(args[5]);
+				local state = sanitise(args[6]);
+				
+				CEPGP.Standby.Ranks[index] = {[rank] = state};
+				STANDBYRANKS[index] = {[rank] = state};
+			elseif setting == "Roster" then
+				local player = sanitise(args[4]);
+				CEPGP_addToStandby(player);
+			else
+				local value = sanitise(args[4]);
+				CEPGP.Standby[setting] = value;
+			end
 		end
-	
-	elseif option == "Standby" then
-		if setting == "Ranks" then
-			local index = sanitise(args[4]);
-			local rank = sanitise(args[5]);
-			local state = sanitise(args[6]);
-			
-			CEPGP.Standby.Ranks[index] = {[rank] = state};
-			STANDBYRANKS[index] = {[rank] = state};
-		elseif setting == "Roster" then
-			local player = sanitise(args[4]);
-			CEPGP_addToStandby(player);
-		else
-			local value = sanitise(args[4]);
-			CEPGP.Standby[setting] = value;
-		end
-	end
-	CEPGP_refreshOptions();
+		CEPGP_refreshOptions();
+	end);
 end
 
 function CEPGP_SendAddonMsg(message, channel, player, logged)
+	local status = "unsent";
 	
 	local conditions = {
 		["CallItem"] = function(id)
@@ -958,6 +965,7 @@ function CEPGP_SendAddonMsg(message, channel, player, logged)
 				for i = 1, #CEPGP_Info.MessageStack do
 					if CEPGP_Info.MessageStack[i] == message then
 						table.remove(CEPGP_Info.MessageStack, i);
+						status = "abandoned";
 						return;
 					end
 				end
@@ -975,6 +983,14 @@ function CEPGP_SendAddonMsg(message, channel, player, logged)
 			sent = C_ChatInfo.SendAddonMessage("CEPGP", message, "PARTY");
 		elseif IsInGuild() then --If channel is not specified then assume guild
 			sent = C_ChatInfo.SendAddonMessage("CEPGP", message, "GUILD");
+		else	--None of the above conditions are met, such as not being in a guild and trying to request a version check. Ditch the message!
+			for i = 1, #CEPGP_Info.MessageStack do
+				if CEPGP_Info.MessageStack[i] == message then
+					table.remove(CEPGP_Info.MessageStack, i);
+					status = "abandoned";
+					return;
+				end
+			end
 		end
 		if not sent and ((channel == "GUILD" and IsInGuild()) or (channel == "RAID" and IsInRaid())) then
 			send();
@@ -1004,10 +1020,19 @@ function CEPGP_SendAddonMsg(message, channel, player, logged)
 	--		Necessary to include as the sent bool for SendAddonMessage returns true even if a message is throttled
 	C_Timer.After(0.1, function()
 		callback = C_Timer.NewTicker(1, function()
+			if status == "abandoned" then
+				callback._remainingIterations = 1;
+				table.insert(CEPGP.Log, {time(), status, UnitName("player"), player, message, channel});
+				return;
+			end
 			if hasSent() then
 				callback._remainingIterations = 1;
+				status = "sent";
+				table.insert(CEPGP.Log, {time(), status, UnitName("player"), player, message, channel});
 			else
 				callback._remainingIterations = 2;
+				status = "attempt";
+				table.insert(CEPGP.Log, {time(), status, UnitName("player"), player, message, channel});
 				send();
 			end
 		end, 1);
