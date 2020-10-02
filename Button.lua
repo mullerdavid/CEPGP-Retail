@@ -2,19 +2,6 @@ local L = CEPGP_Locale:GetLocale("CEPGP");
 
 function CEPGP_ListButton_OnClick(obj, button)
 	if button == "LeftButton" then
-		if strfind(obj, "CEPGP_guild_reset") then
-			CEPGP_context_popup_desc:SetPoint("TOP", CEPGP_context_popup_title, "BOTTOM", 0, -5);
-		else
-			CEPGP_context_popup_desc:SetPoint("TOP", CEPGP_context_popup_title, "BOTTOM", 0, -15);
-		end
-		if strfind(obj, "CEPGP_standby_ep_list_add") then
-			_G["CEPGP_context_reason"]:Hide();
-			_G["CEPGP_context_popup_reason"]:Hide();
-		else
-			_G["CEPGP_context_reason"]:Show();
-			_G["CEPGP_context_popup_reason"]:Show();
-		end
-		
 		if strfind(obj, "overrideButton") and strfind(obj, "Delete") then
 			
 			local name = _G[_G[obj]:GetParent():GetName() .. "item"]:GetText();
@@ -72,11 +59,29 @@ function CEPGP_ListButton_OnClick(obj, button)
 			return;
 		end
 		
+		--
+		--	The following should be only accessible to those with edit access (i.e. officers)
+		--
+		
+		if strfind(obj, "CEPGP_guild_reset") then
+			CEPGP_context_popup_desc:SetPoint("TOP", CEPGP_context_popup_title, "BOTTOM", 0, -5);
+		else
+			CEPGP_context_popup_desc:SetPoint("TOP", CEPGP_context_popup_title, "BOTTOM", 0, -15);
+		end
+		if strfind(obj, "CEPGP_standby_ep_list_add") then
+			_G["CEPGP_context_reason"]:Hide();
+			_G["CEPGP_context_popup_reason"]:Hide();
+		else
+			_G["CEPGP_context_reason"]:Show();
+			_G["CEPGP_context_popup_reason"]:Show();
+		end
+		
+		if not CanEditOfficerNote() and not CEPGP_Info.Debug then
+			CEPGP_print("You don't have access to modify EPGP", 1);
+			return;
+		end
+		
 		if obj == "CEPGP_options_standby_ep_award" then
-			if not CanEditOfficerNote() and not CEPGP_Info.Debug then
-				CEPGP_print("You don't have access to modify EPGP", 1);
-				return;
-			end
 			ShowUIPanel(CEPGP_context_popup);
 			ShowUIPanel(CEPGP_context_amount);
 			ShowUIPanel(CEPGP_context_popup_EP_check);
