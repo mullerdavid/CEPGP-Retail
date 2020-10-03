@@ -520,6 +520,7 @@ function CEPGP_addResponse(player, response, roll)
 	local message = "!need;"..player..";"..CEPGP_Info.Loot.DistributionID..";"..response..";"..roll;
 	CEPGP_distribute_responses_received:SetText(CEPGP_ntgetn(CEPGP_Info.Loot.ItemsTable) .. " of " .. CEPGP_Info.Loot.NumOnline .. " Responses Received");
 	
+	CEPGP_SendAddonMsg("Acknowledge;" .. CEPGP_Info.Loot.GUID .. ";" .. response, "WHISPER", player);
 		--	Shares the loot distribution results with the raid / assists
 	if not CEPGP.Loot.DelayResponses then
 		CEPGP_sendLootMessage(message);

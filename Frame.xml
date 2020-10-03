@@ -10593,6 +10593,7 @@
 										<FontString name="CEPGP_loot_options_announce_roll_text" inherits="GameFontNormal" text="Include Rolls in Response Announcements:" />
 										<FontString name="CEPGP_loot_options_resolve_roll_text" inherits="GameFontNormal" text="Auto Resolve Duplicate Rolls:" />
 										<FontString name="CEPGP_loot_options_show_PR_difference" inherits="GameFontNormal" text="Show Priority Difference on Response:" />
+										<FontString name="CEPGP_loot_options_acknowledge_response" inherits="GameFontNormal" text="Show Response Acknowledgements:" />
 									</Layer>
 								</Layers>
 								<Frames>
@@ -12672,6 +12673,37 @@
 											</OnShow>
 										</Scripts>
 									</CheckButton>
+									<CheckButton name="CEPGP_loot_options_acknowledge_response_check" inherits="UIOptionsCheckButtonTemplate">
+										<HitRectInsets>
+											<AbsInset left="0" right="0" top="0" bottom="0" />
+										</HitRectInsets>
+										<Anchors>
+											<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="CEPGP_loot_options_acknowledge_response">
+												<Offset>
+													<AbsDimension x="-5" y="0" />
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												CEPGP.Loot.Acknowledge = self:GetChecked();
+											</OnClick>
+											<OnEnter>
+												GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
+												GameTooltip:SetText("Shows a message in your chat window when your response is received by the loot master");
+											</OnEnter>
+											<OnLeave>
+												GameTooltip:Hide();
+											</OnLeave>
+											<OnShow>
+												if CEPGP.Loot.Acknowledge then
+													self:SetChecked(true);
+												else
+													self:SetChecked(false);
+												end
+											</OnShow>
+										</Scripts>
+									</CheckButton>
 
 									<Button name="CEPGP_min_threshold_dropdown" inherits="UIDropDownMenuTemplate">
 										<Anchors>
@@ -12807,6 +12839,7 @@
 				CEPGP_loot_options_announce_roll_text:SetPoint("TOPLEFT", "CEPGP_loot_options_pass_roll_award_text", "BOTTOMLEFT", 0, -10);
 				CEPGP_loot_options_resolve_roll_text:SetPoint("TOPLEFT", "CEPGP_loot_options_announce_roll_text", "BOTTOMLEFT", 0, -10);
 				CEPGP_loot_options_show_PR_difference:SetPoint("TOPLEFT", "CEPGP_loot_options_resolve_roll_text", "BOTTOMLEFT", 0, -10);
+				CEPGP_loot_options_acknowledge_response:SetPoint("TOPLEFT", "CEPGP_loot_options_show_PR_difference", "BOTTOMLEFT", 0, -10);
 				
 				for i = 1, 4 do
 					local frame = _G[self:GetName() .. "_preview_" .. i];

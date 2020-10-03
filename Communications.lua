@@ -245,12 +245,16 @@ function CEPGP_IncAddonMsg(message, sender, channel)
 			CEPGP_RaidAssistLootClosed();
 		end
 		
-		
+	
+	elseif args[1] == "Acknowledge" then
+		local response = tonumber(args[3]);
+		if CEPGP.Loot.Acknowledge then
+			CEPGP_print("You have responded with " .. CEPGP_Info.LootSchema[response]);
+		end
+		CEPGP_respond:Hide();
+	
 	elseif args[1] == "!need" then
 		local player = args[2];
-		if player == UnitName("player") then
-			CEPGP_respond:Hide();
-		end
 		local response = tonumber(args[4]) or CEPGP_getResponse(args[4]) or CEPGP_getResponseIndex(args[4]) or CEPGP_indexToLabel(args[4]);
 		local roll = args[5];
 		if sender ~= UnitName("player") then
@@ -1407,6 +1411,9 @@ function CEPGP_SendAddonMsg(message, channel, player, logged)
 			end
 		end,
 		["CEPGP_setLootGUID"] = function(GUID)
+			return GUID == CEPGP_Info.Loot.GUID;
+		end,
+		["Acknowledge"] = function(GUID)
 			return GUID == CEPGP_Info.Loot.GUID;
 		end
 	}
