@@ -252,10 +252,10 @@ function CEPGP_UpdateGuildScrollBar()
 	tempTable = CEPGP_tSort(tempTable, CEPGP_Info.Sorting.Guild[1], CEPGP_Info.Sorting.Guild[2]);
 	local kids = {_G["CEPGP_guild_scrollframe_container"]:GetChildren()};
 	for index, child in ipairs(kids) do
-		--if index > CEPGP_ntgetn(CEPGP_Info.Guild.Roster) then
+		if index > CEPGP_ntgetn(CEPGP_Info.Guild.Roster) then
 			child:Hide();
-			child = nil;
-		--end
+			--child = nil;
+		end
 		--child:Hide();
 	end
 	local i = 1;
