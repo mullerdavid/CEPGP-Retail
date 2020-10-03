@@ -2860,6 +2860,7 @@
 						CEPGP_settings_import_confirm:Disable();
 						CEPGP_settings_import_verbose_check:Disable();
 						CEPGP_settings_import:Hide();
+						CEPGP_Info.Import.Source = name;
 						CEPGP_SendAddonMsg("ImportStart", "WHISPER", name);
 						CEPGP_print("Starting import - please wait...");
 						CEPGP_Info.Import.Running = true;
@@ -2877,7 +2878,6 @@
 							for i = 1, limit do
 								local frame = _G["ImportCheckButton_" .. i];
 								frame:Enable();
-								CEPGP_Info.Import.Running = true;
 							end
 						end);
 					</OnClick>

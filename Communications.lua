@@ -94,9 +94,11 @@ function CEPGP_IncAddonMsg(message, sender, channel)
 	
 	if args[1] == "ExportConfig" then
 		if not CEPGP_Info.Guild.Roster[sender] then return; end
-		if not CEPGP.Sync[1] then return; end
-		local rank = CEPGP_Info.Guild.Roster[sender][4];
-		if not CEPGP.Sync[2][rank] then return; end
+		if not CEPGP_Info.Import.Running then
+			if not CEPGP.Sync[1] then return; end
+			local rank = CEPGP_Info.Guild.Roster[sender][4];
+			if not CEPGP.Sync[2][rank] then return; end
+		end
 		CEPGP_OverwriteOption(args, sender, channel);
 		return;
 	end
@@ -907,7 +909,6 @@ function CEPGP_ExportConfig(player)
 				CEPGP_SendAddonMsg("ExportConfig;ImportComplete;" .. _option, channel, player);
 				completed = completed + 1;
 			end
-			
 			
 			if completed == #CEPGP_Info.Import.List then
 				CEPGP_Info.Import.List = {};

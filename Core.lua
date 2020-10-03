@@ -173,7 +173,7 @@ CEPGP_Info = {
 		Source =				""
 	},
 	Version = 					{
-		Number =				"1.13.0",
+		Number =				"1.13.1",
 		Build =					"Release",
 		List =					{
 		},
