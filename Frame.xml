@@ -12690,7 +12690,7 @@
 											</OnClick>
 											<OnEnter>
 												GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
-												GameTooltip:SetText("Shows a message in your chat window when your response is received by the loot master");
+												GameTooltip:SetText("Personal Feature\nShows a message in your chat window when your response is received by the loot master");
 											</OnEnter>
 											<OnLeave>
 												GameTooltip:Hide();
