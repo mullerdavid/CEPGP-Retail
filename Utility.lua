@@ -510,12 +510,18 @@ function CEPGP_addResponse(player, response, roll)
 	if response and not tonumber(response) then
 		response = CEPGP_getResponseIndex(response);
 	end
-	CEPGP_Info.Loot.ItemsTable[player] = {};
-	CEPGP_Info.Loot.ItemsTable[player][3] = response;
+	CEPGP_Info.Loot.ItemsTable[player] = CEPGP_Info.Loot.ItemsTable[player] or {};
 	
-	if CEPGP_indexToLabel(response) or CEPGP_getResponse(response) or CEPGP_getResponseIndex(response) or (CEPGP.Loot.PassRolls and response == 6) or response < 6 then
-		CEPGP_Info.Loot.ItemsTable[player][4] = roll;
-	end
+	if CEPGP_Info.Loot.ItemsTable[player][3] then
+		if CEPGP.Loot.Resubmit then
+			CEPGP_Info.Loot.ItemsTable[player][3] = response;
+		end
+	else
+		CEPGP_Info.Loot.ItemsTable[player][3] = response;
+		if CEPGP_indexToLabel(response) or CEPGP_getResponse(response) or CEPGP_getResponseIndex(response) or (CEPGP.Loot.PassRolls and response == 6) or response < 6 then
+			CEPGP_Info.Loot.ItemsTable[player][4] = roll;
+		end
+	end	
 	
 	local message = "!need;"..player..";"..CEPGP_Info.Loot.DistributionID..";"..response..";"..roll;
 	CEPGP_distribute_responses_received:SetText(CEPGP_ntgetn(CEPGP_Info.Loot.ItemsTable) .. " of " .. CEPGP_Info.Loot.NumOnline .. " Responses Received");
