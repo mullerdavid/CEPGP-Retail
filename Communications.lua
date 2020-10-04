@@ -244,7 +244,11 @@ function CEPGP_IncAddonMsg(message, sender, channel)
 	elseif args[1] == "Acknowledge" then
 		local response = tonumber(args[3]);
 		if CEPGP.Loot.Acknowledge then
-			CEPGP_print("You have responded with " .. CEPGP_Info.LootSchema[response]);
+			if response == 6 then
+				CEPGP_print("You have passed on this item");
+			else
+				CEPGP_print("You have responded with " .. CEPGP_Info.LootSchema[response]);
+			end
 		end
 		CEPGP_respond:Hide();
 	

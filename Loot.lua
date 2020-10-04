@@ -66,16 +66,6 @@ end
 
 function CEPGP_announce(link, x, slotNum, quantity)
 
-	local function CEPGP_GetNumOnlineGroupMembers()
-		local count = 0;
-		local limit = GetNumGroupMembers();
-		for i = 1, limit do
-			local online = select(8, GetRaidRosterInfo(i));
-			if online then count = count + 1; end
-		end
-		return count;
-	end
-
 	if (GetLootMethod() == "master" and CEPGP_isML() == 0) or CEPGP_Info.Debug then
 		local iString = CEPGP_getItemString(link);
 		local name, _, _, _, _, _, _, _, slot, tex = GetItemInfo(iString);

@@ -533,6 +533,16 @@ function CEPGP_addResponse(player, response, roll)
 	end
 end
 
+function CEPGP_GetNumOnlineGroupMembers()
+	local count = 0;
+	local limit = GetNumGroupMembers();
+	for i = 1, limit do
+		local online = select(8, GetRaidRosterInfo(i));
+		if online then count = count + 1; end
+	end
+	return count;
+end
+
 function CEPGP_announceResponses()
 	local responses = {};
 		
@@ -2339,6 +2349,7 @@ function CEPGP_callItem(id, gp, buttons, timeout)
 	local name, link, _, _, _, _, _, _, _, tex, _, classID, subClassID = GetItemInfo(id);
 	local iString;
 	CEPGP_Info.LastRun.ItemCall = GetTime();
+	CEPGP_Info.Loot.NumOnline = CEPGP_GetNumOnlineGroupMembers();
 	local timestamp = CEPGP_Info.LastRun.ItemCall;
 	
 	local call;
