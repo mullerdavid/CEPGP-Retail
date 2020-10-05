@@ -598,7 +598,7 @@ end
 function CEPGP_sendLootMessage(message)
 	local announceRanks = {};
 	--	Identify which guild ranks should be included
-	for rank, state in ipairs(CEPGP.Loot.RaidVisibility[3]) do
+	for rank, state in pairs(CEPGP.Loot.RaidVisibility[3]) do
 		if state then
 			table.insert(announceRanks, rank);
 		end
