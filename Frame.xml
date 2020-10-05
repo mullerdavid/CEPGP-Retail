@@ -1060,7 +1060,7 @@
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="$parent_announce_response" inherits="GameMenuButtonTemplate">
+					<Button name="$parent_announce_response" inherits="GameMenuButtonTemplate" hidden="true">
 						<Size x="1" y="25" />
 						<Anchors>
 							<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent_roll_award" />
@@ -1091,8 +1091,10 @@
 						CEPGP_distributing_button:Show();
 						if CEPGP_isML() ~= 0 then
 							CEPGP_distribute_roll_award:Hide();
+							CEPGP_distribute_announce_response:Hide();
 						else
 							CEPGP_distribute_roll_award:Show();
+							CEPGP_distribute_announce_response:Show();
 						end
 						CEPGP_frame:SetWidth(CEPGP_frame:GetWidth()+150);
 						
@@ -6565,7 +6567,7 @@
 				heading:SetPoint("TOP", 0, -20);
 				content:SetPoint("TOPLEFT", 20, -40);
 				heading:SetText("Classic EPGP Version " .. CEPGP_Info.Version.Number .. " " .. CEPGP_Info.Version.Build .. " Changelog");
-				local info = "New Features:\n- Added rank filter for guild scrollbar\n- Players can now show the change to PR when responding for an item\n- The number of responses received will now be shown on the loot distribution window\n- Added option to include/exclude passes in award to highest roller\n- Rank-based distribution visibility\n- Added a button to announce current responses in loot distribution\n\n\nBugfixes:\n- Corrected an issue with extracting item IDs from item strings\n- Passes will once again be hidden if the option to show is not enabled\n- Corrected an issue where an item would be given to the wrong player if a person in loot distribution is clicked and then more responses come in\n- The active window should no longer change when an item other than the one being distributed is looted\n- Corrected an issue where item announcements would be stalled due to roster polling\n- Fixed an issue preventing restoring from previous backups\n- Qiraji Spiked Hilt now is identified as slot type weapon instead of weapon offhand\n- CEPGP window will no longer hide when the loot master stops looting unless you're viewing a loot or distribution frame\n- Fixed an issue where the version frame would reset everyone to \"Addon Not Enabled\" periodically\n\n\nChanges:\n- Completed volatile structure migration\n- Completed non-volatile structure migration\n- Raid roster now overwrites on each scan cycle using a shadow copy\n- Refactored version data structure\n- Version scanning processes have been optimised\n- Reduced message cache capacity to 500 down from 2000\n- Added a minimap button\n- Excluded guild ranks will now be included in the version list\n- Loot distribution window should no longer close when raid members alter their settings\n- Guild roster should now load and become available much faster\n- All loot related messages now run through the whisper channel\n- All fontstrings in loot distribution window now inherit from GameFontHighlightSmall\n- There is no longer a delay on auto showing the distribution window for assists/raid members (does not affect loot master)\n- Players can no longer include semicolons in the button text or keyword for loot responses\n- Players can no longer continue to submit responses after the distribution timer has expired\n- Text from the message log can now be copied\n- Minimap icon will now tell you on mouseover if CEPGP is active in your raid or not\n- Implemented query and response messages for importing\n- Staggered import process\n- All rare tokens now have been overriden to use the epic rarity value\n- Changed attachment point for the sync settings button\n- Addition of new entries is no longer locked for the period where traffic is being shared\n- Traffic sharing will no longer prevent new traffic entries from being created during the sharing process\n- Traffic sharing and import settings now detects if the source player has disconnected\n- Addon management delegation (force sync) is now selected via checkboxes rather than a dropdown menu\n- Addon configuration (force sync) can now be pushed out without needing to nominate a rank to accept it from\n- Streamlined the configuration management sync feature\n- Slight restructuring of the options menus";
+				local info = "New Features:\n- Loot Masters can now permit raiders to change their loot response via whispers\n- Added an option to acknowledge responses when players respond for loot\n\nBugfixes:\n- Corrected a cosmetic bug where anyone could open the add EP/GP window\n- Corrected an issue where import settings requests would be blocked and lock\n- Resolved an issue where the loot timer would not tick down on recipient clients\n- Resolved an exploit which allowed players to change their loot roll\n- Resolved an issue preventing rank-based distribution visibility from working\n\nChanges:\n- Adjusted scrollbar behaviour so the guild scrollframe no longer loses its position";
 				content:SetText(info);
 				self:SetWidth(content:GetStringWidth()+40);
 				self:SetHeight(heading:GetStringHeight() + content:GetStringHeight() + 50);
