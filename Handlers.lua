@@ -12,7 +12,6 @@ function CEPGP_handleComms(event, arg1, arg2, response, lootGUID)
 		response = arg1;
 	end
 	local reason = CEPGP.Loot.GUI.Buttons[response] and CEPGP.Loot.GUI.Buttons[response][2] or CEPGP_Info.LootSchema[response] or CEPGP_getResponse(CEPGP_getResponseIndex(response));
-	local index = CEPGP_getIndex(arg2);
 
 	if event == "CHAT_MSG_WHISPER" and response then
 		if (lootGUID ~= CEPGP_Info.Loot.GUID and lootGUID ~= "") and not arg1 then return; end
@@ -41,7 +40,6 @@ function CEPGP_handleComms(event, arg1, arg2, response, lootGUID)
 		end
 		
 		if not CEPGP_Info.Loot.Distributing then return; end
-		if CEPGP_Info.Loot.ItemsTable[name] then return; end
 		
 		if CEPGP_Info.Loot.Expired and arg1 then
 			CEPGP_SendAddonMsg("msg;The time to respond for this item has expired. Responses are no longer being accepted!", "WHISPER", arg2, true);
@@ -52,93 +50,83 @@ function CEPGP_handleComms(event, arg1, arg2, response, lootGUID)
 			CEPGP_print(arg2 .. " registered (" .. CEPGP.EP.Keyword .. ")");
 		end
 		local _, _, _, _, _, _, _, _, slot = GetItemInfo(CEPGP_Info.Loot.DistributionID);
+		local name = arg2;
 		if not slot and CEPGP_itemExists(CEPGP_Info.Loot.DistributionID) then
 			local item = Item:CreateFromItemID(CEPGP_Info.Loot.DistributionID);
 			item:ContinueOnItemLoad(function()
 				local _, _, _, _, _, _, _, _, slot = GetItemInfo(CEPGP_Info.Loot.DistributionID)
 				local EP, GP = nil;
 				local inGuild = false;
-				if CEPGP_Info.Guild.Roster[arg2] then 
-					EP, GP = CEPGP_getEPGP(arg2, index);
-					class = CEPGP_Info.Guild.Roster[arg2][2];
+				if CEPGP_Info.Guild.Roster[name] then
+					local index = CEPGP_Info.Guild.Roster[name][1];
+					EP, GP = CEPGP_getEPGP(name, index);
+					class = CEPGP_Info.Guild.Roster[name][2];
 					inGuild = true;
-				elseif index then
-					EP, GP = CEPGP_getEPGP(arg2, index);
-					class = select(5, GetGuildRosterInfo(index));
-					inGuild = true; 
 				end
 				if CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or (CEPGP.Loot.ShowPass and response == 6) or response < 6 then
-					CEPGP_SendAddonMsg(arg2..";distslot;"..CEPGP_Info.Loot.DistEquipSlot, "WHISPER", arg2);
+					CEPGP_SendAddonMsg(name..";distslot;"..CEPGP_Info.Loot.DistEquipSlot, "WHISPER", name);
 				end
 				if inGuild and not CEPGP.Loot.SuppressResponses then
 					if (CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or response < 5) and not CEPGP.Loot.DelayResponses then	-- 5 means they're not using the addon or they're using an outdated version that doesn't support responses
 						if CEPGP.Loot.RollAnnounce then
-							CEPGP_sendChatMessage(arg2 .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR) (Rolled " .. roll .. ")", CEPGP.LootChannel);
+							CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR) (Rolled " .. roll .. ")", CEPGP.LootChannel);
 						else
-							CEPGP_sendChatMessage(arg2 .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR)", CEPGP.LootChannel);
+							CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR)", CEPGP.LootChannel);
 						end
 					end
 				elseif not CEPGP.Loot.SuppressResponses then
 					local total = GetNumGroupMembers();
 					for i = 1, total do
-						if arg2 == GetRaidRosterInfo(i) then
+						if name == GetRaidRosterInfo(i) then
 							_, _, _, _, class = GetRaidRosterInfo(i);
 						end
 					end
 					if (CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or response < 5) and not CEPGP.Loot.DelayResponses then
 						if CEPGP.Loot.RollAnnounce then
-							CEPGP_sendChatMessage(arg2 .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member) (Rolled " .. roll .. ")", CEPGP.LootChannel);
+							CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member) (Rolled " .. roll .. ")", CEPGP.LootChannel);
 						else
-							CEPGP_sendChatMessage(arg2 .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member)", CEPGP.LootChannel);
+							CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member)", CEPGP.LootChannel);
 						end
 					end
 				end
 			end);
 		else
-
 			local EP, GP = nil;
 			local inGuild = false;
-			if CEPGP_Info.Guild.Roster[arg2] then 
-					local index = CEPGP_getIndex(arg2);
-					EP, GP = CEPGP_getEPGP(arg2, index);
-					class = CEPGP_Info.Guild.Roster[arg2][2];
-					inGuild = true;
-				else
-					local index = CEPGP_getIndex(arg2);
-					if index then
-						EP, GP = CEPGP_getEPGP(arg2, index);
-						class = select(5, GetGuildRosterInfo(index));
-						inGuild = true; 
-					end
-				end
+			if CEPGP_Info.Guild.Roster[name] then 
+				local index = CEPGP_getIndex(name, CEPGP_Info.Guild.Roster[name][1]);
+				EP, GP = CEPGP_getEPGP(name, index);
+				class = CEPGP_Info.Guild.Roster[name][2];
+				inGuild = true;
+			end
 			if CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or (CEPGP.Loot.ShowPass and response == 6) or response < 6 then
-				CEPGP_SendAddonMsg(arg2..";distslot;"..CEPGP_Info.Loot.DistEquipSlot, "WHISPER", arg2);
+				CEPGP_SendAddonMsg(name..";distslot;"..CEPGP_Info.Loot.DistEquipSlot, "WHISPER", name);
 			end
 			if inGuild and not CEPGP.Loot.SuppressResponses then
 				if (CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or response < 5) and not CEPGP.Loot.DelayResponses then
 					if CEPGP.Loot.RollAnnounce then
-						CEPGP_sendChatMessage(arg2 .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR) (Rolled " .. roll .. ")", CEPGP.LootChannel);
+						CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR) (Rolled " .. roll .. ")", CEPGP.LootChannel);
 					else
-						CEPGP_sendChatMessage(arg2 .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR)", CEPGP.LootChannel);
+						CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR)", CEPGP.LootChannel);
 					end
 				end
 			elseif not CEPGP.Loot.SuppressResponses then
 				local total = GetNumGroupMembers();
 				for i = 1, total do
-					if arg2 == GetRaidRosterInfo(i) then
+					if name == GetRaidRosterInfo(i) then
 						_, _, _, _, class = GetRaidRosterInfo(i);
 					end
 				end
 				if (CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or response < 5) and not CEPGP.Loot.DelayResponses then
 					if CEPGP.Loot.RollAnnounce then
-						CEPGP_sendChatMessage(arg2 .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member) (Rolled " .. roll .. ")", CEPGP.LootChannel);
+						CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member) (Rolled " .. roll .. ")", CEPGP.LootChannel);
 					else
-						CEPGP_sendChatMessage(arg2 .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member)", CEPGP.LootChannel);
+						CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member)", CEPGP.LootChannel);
 					end
 				end
 			end
 		end
-		CEPGP_addResponse(arg2, response, roll);
+		CEPGP_addResponse(name, response, roll);
 		CEPGP_UpdateLootScrollBar(true);
 		
 	elseif event == "CHAT_MSG_WHISPER" and string.lower(arg1) == "!info" then
