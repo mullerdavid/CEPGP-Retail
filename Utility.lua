@@ -2351,6 +2351,7 @@ end
 function CEPGP_callItem(id, gp, buttons, timeout)
 	if not id then return; end
 	CEPGP_Info.Loot.ItemsTable = {};
+	CEPGP_UpdateLootScrollBar();
 	id = tonumber(id); -- Must be in a numerical format
 	local name, link, _, _, _, _, _, _, _, tex, _, classID, subClassID = GetItemInfo(id);
 	local iString;
@@ -2380,6 +2381,7 @@ function CEPGP_callItem(id, gp, buttons, timeout)
 			end
 			if CEPGP_ntgetn(CEPGP_Info.Loot.ItemsTable) == CEPGP_Info.Loot.NumOnline then
 				CEPGP_distribute_time:SetText("All Responses Received");
+				CEPGP_Info.Loot.Expired = true;
 				callback._remainingIterations = 1;
 				return;
 			end

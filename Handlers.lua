@@ -16,6 +16,7 @@ function CEPGP_handleComms(event, arg1, arg2, response, lootGUID)
 	if event == "CHAT_MSG_WHISPER" and response then
 		if (lootGUID ~= CEPGP_Info.Loot.GUID and lootGUID ~= "") and not arg1 then return; end
 		local roll = 0;
+		local name = arg2;
 		
 		local function checkRoll(name)
 			for k, v in pairs(CEPGP_Info.Loot.ItemsTable) do
@@ -35,22 +36,25 @@ function CEPGP_handleComms(event, arg1, arg2, response, lootGUID)
 		if (response == 6 and CEPGP.Loot.PassRolls) or response ~= 6 then
 			roll = math.ceil(math.random(1,100));
 			if CEPGP.Loot.ResolveRolls then
-				checkRoll(arg2);
+				checkRoll(name);
 			end
 		end
 		
 		if not CEPGP_Info.Loot.Distributing then return; end
 		
 		if CEPGP_Info.Loot.Expired and arg1 then
-			CEPGP_SendAddonMsg("msg;The time to respond for this item has expired. Responses are no longer being accepted!", "WHISPER", arg2, true);
+			CEPGP_SendAddonMsg("msg;The time to respond for this item has expired. Responses are no longer being accepted!", "WHISPER", name, true);
 			return;
 		end
 		
 		if CEPGP_Info.Debug then
-			CEPGP_print(arg2 .. " registered (" .. CEPGP.EP.Keyword .. ")");
+			if CEPGP_Info.Loot.ItemsTable[name] then
+				CEPGP_print(name .. " changed their response");
+			else
+				CEPGP_print(name .. " registered");
+			end
 		end
 		
-		local name = arg2;
 		local EP, GP = nil;
 		local inGuild = false;
 		if CEPGP_Info.Guild.Roster[name] then 
