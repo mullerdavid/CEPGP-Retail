@@ -174,7 +174,7 @@ CEPGP_Info = {
 	},
 	Version = 					{
 		Number =				"1.13.1",
-		Build =					"Beta 2",
+		Build =					"Beta 3",
 		List =					{
 		},
 		ListSearch =			"GUILD",

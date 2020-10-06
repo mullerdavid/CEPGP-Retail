@@ -618,9 +618,11 @@ function CEPGP_sendLootMessage(message)
 				end
 			end
 		end
-		for _, name in ipairs(players) do
-			CEPGP_SendAddonMsg(message, "WHISPER", name);
-		end
+		local limit = #players;
+		C_Timer.NewTicker(0.1, function()
+			CEPGP_SendAddonMsg(msg, "WHISPER", players[1]);
+			table.remove(players, 1);
+		end, limit);
 	end
 	
 	if CEPGP.Loot.RaidVisibility[2] then

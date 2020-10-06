@@ -128,7 +128,7 @@ function CEPGP_IncAddonMsg(message, sender, channel)
 		end
 		CEPGP_UpdateLootScrollBar();
 		
-	elseif args[1] == "CEPGP_setLootGUID" then
+	elseif args[1] == "CEPGP_setLootGUID" and sender ~= UnitName("player") then
 		CEPGP_Info.Loot.GUID = args[2];
 	
 	elseif args[1] == UnitName("player") and args[2] == "distslot" then
@@ -1591,9 +1591,11 @@ function CEPGP_messageGroup(msg, group, logged, _rank)
 				end
 			end
 		end
-		for _, name in ipairs(names) do
-			CEPGP_SendAddonMsg(msg, "WHISPER", name, logged);
-		end
+		local limit = #names;
+		C_Timer.NewTicker(0.1, function()
+			CEPGP_SendAddonMsg(msg, "WHISPER", names[1], logged);
+			table.remove(names, 1);
+		end, limit);
 	end
 	
 	local function MessageRaid()
@@ -1616,9 +1618,11 @@ function CEPGP_messageGroup(msg, group, logged, _rank)
 				end
 			end
 		end
-		for _, name in ipairs(names) do
-			CEPGP_SendAddonMsg(msg, "WHISPER", name, logged);
-		end
+		local limit = #names;
+		C_Timer.NewTicker(0.1, function()
+			CEPGP_SendAddonMsg(msg, "WHISPER", names[1], logged);
+			table.remove(names, 1);
+		end, limit);
 	end
 	
 	local function MessageAssists()
@@ -1642,9 +1646,14 @@ function CEPGP_messageGroup(msg, group, logged, _rank)
 				end
 			end
 		end
-		for _, name in ipairs(names) do
+		local limit = #names;
+		C_Timer.NewTicker(0.1, function()
+			CEPGP_SendAddonMsg(msg, "WHISPER", names[1], logged);
+			table.remove(names, 1);
+		end, limit);
+		--[[for _, name in ipairs(names) do
 			CEPGP_SendAddonMsg(msg, "WHISPER", name, logged);
-		end
+		end]]
 	end
 		
 	if group == "party" then
