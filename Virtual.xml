@@ -685,6 +685,7 @@
 		</Frames>
 		<Attributes>
 			<Attribute name="delete_confirm" type="boolean" value="false" />
+			<Attribute name="id" type="number" value="false" />
 		</Attributes>
 		<Scripts>
 			<OnLoad>

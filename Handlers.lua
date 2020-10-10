@@ -14,83 +14,90 @@ function CEPGP_handleComms(event, arg1, arg2, response, lootGUID)
 	local reason = CEPGP.Loot.GUI.Buttons[response] and CEPGP.Loot.GUI.Buttons[response][2] or CEPGP_Info.LootSchema[response] or CEPGP_getResponse(CEPGP_getResponseIndex(response));
 
 	if event == "CHAT_MSG_WHISPER" and response then
-		if (lootGUID ~= CEPGP_Info.Loot.GUID and lootGUID ~= "") and not arg1 then return; end
-		local roll = 0;
-		local name = arg2;
-		
-		local function checkRoll(name)
-			for k, v in pairs(CEPGP_Info.Loot.ItemsTable) do
-				if k ~= name then
-					if v[4] then
-						if v[4] == roll then
-							roll = math.ceil(math.random(1,100));
-							checkRoll(name);
-							return false;
+		local success, failMsg = pcall(function()
+			if (lootGUID ~= CEPGP_Info.Loot.GUID and lootGUID ~= "") and not arg1 then return; end
+			local roll = 0;
+			local name = arg2;
+			
+			local function checkRoll(name)
+				for k, v in pairs(CEPGP_Info.Loot.ItemsTable) do
+					if k ~= name then
+						if v[4] then
+							if v[4] == roll then
+								roll = math.ceil(math.random(1,100));
+								checkRoll(name);
+								return false;
+							end
 						end
 					end
 				end
+				return true;
 			end
-			return true;
-		end
-		
-		if (response == 6 and CEPGP.Loot.PassRolls) or response ~= 6 then
-			roll = math.ceil(math.random(1,100));
-			if CEPGP.Loot.ResolveRolls then
-				checkRoll(name);
+			
+			if (response == 6 and CEPGP.Loot.PassRolls) or response ~= 6 then
+				roll = math.ceil(math.random(1,100));
+				if CEPGP.Loot.ResolveRolls then
+					checkRoll(name);
+				end
 			end
-		end
-		
-		if not CEPGP_Info.Loot.Distributing then return; end
-		
-		if CEPGP_Info.Loot.Expired and arg1 then
-			CEPGP_SendAddonMsg("msg;The time to respond for this item has expired. Responses are no longer being accepted!", "WHISPER", name, true);
-			return;
-		end
-		
-		if CEPGP_Info.Debug then
-			if CEPGP_Info.Loot.ItemsTable[name] then
-				CEPGP_print(name .. " changed their response");
-			else
-				CEPGP_print(name .. " registered");
+			
+			if not CEPGP_Info.Loot.Distributing then return; end
+			
+			if CEPGP_Info.Loot.Expired and arg1 then
+				CEPGP_SendAddonMsg("msg;The time to respond for this item has expired. Responses are no longer being accepted!", "WHISPER", name, true);
+				return;
 			end
-		end
-		
-		local EP, GP = nil;
-		local inGuild = false;
-		if CEPGP_Info.Guild.Roster[name] then 
-			local index = CEPGP_getIndex(name, CEPGP_Info.Guild.Roster[name][1]);
-			EP, GP = CEPGP_getEPGP(name, index);
-			class = CEPGP_Info.Guild.Roster[name][2];
-			inGuild = true;
-		end
-		if CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or (CEPGP.Loot.ShowPass and response == 6) or response < 6 then
-			CEPGP_SendAddonMsg(name..";distslot;"..CEPGP_Info.Loot.DistEquipSlot, "WHISPER", name);
-		end
-		if inGuild and not CEPGP.Loot.SuppressResponses then
-			if (CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or response < 5) and not CEPGP.Loot.DelayResponses then
-				if CEPGP.Loot.RollAnnounce then
-					CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR) (Rolled " .. roll .. ")", CEPGP.LootChannel);
+			
+			if CEPGP_Info.Debug then
+				if CEPGP_Info.Loot.ItemsTable[name] then
+					CEPGP_print(name .. " changed their response");
 				else
-					CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR)", CEPGP.LootChannel);
+					CEPGP_print(name .. " registered");
 				end
 			end
-		elseif not CEPGP.Loot.SuppressResponses then
-			local total = GetNumGroupMembers();
-			for i = 1, total do
-				if name == GetRaidRosterInfo(i) then
-					_, _, _, _, class = GetRaidRosterInfo(i);
+			
+			local EP, GP = nil;
+			local inGuild = false;
+			if CEPGP_Info.Guild.Roster[name] then 
+				local index = CEPGP_getIndex(name, CEPGP_Info.Guild.Roster[name][1]);
+				EP, GP = CEPGP_getEPGP(name, index);
+				class = CEPGP_Info.Guild.Roster[name][2];
+				inGuild = true;
+			end
+			if CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or (CEPGP.Loot.ShowPass and response == 6) or response < 6 then
+				CEPGP_SendAddonMsg(name..";distslot;"..CEPGP_Info.Loot.DistEquipSlot, "WHISPER", name);
+			end
+			if inGuild and not CEPGP.Loot.SuppressResponses then
+				if (CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or response < 5) and not CEPGP.Loot.DelayResponses then
+					if CEPGP.Loot.RollAnnounce then
+						CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR) (Rolled " .. roll .. ")", CEPGP.LootChannel);
+					else
+						CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (" .. math.floor((EP/GP)*100)/100 .. " PR)", CEPGP.LootChannel);
+					end
+				end
+			elseif not CEPGP.Loot.SuppressResponses then
+				local total = GetNumGroupMembers();
+				for i = 1, total do
+					if name == GetRaidRosterInfo(i) then
+						_, _, _, _, class = GetRaidRosterInfo(i);
+					end
+				end
+				if (CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or response < 5) and not CEPGP.Loot.DelayResponses then
+					if CEPGP.Loot.RollAnnounce then
+						CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member) (Rolled " .. roll .. ")", CEPGP.LootChannel);
+					else
+						CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member)", CEPGP.LootChannel);
+					end
 				end
 			end
-			if (CEPGP_getResponse(arg1) or CEPGP_getResponseIndex(arg1) or response < 5) and not CEPGP.Loot.DelayResponses then
-				if CEPGP.Loot.RollAnnounce then
-					CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member) (Rolled " .. roll .. ")", CEPGP.LootChannel);
-				else
-					CEPGP_sendChatMessage(name .. " (" .. class .. ") needs (" .. reason .. "). (Non-guild member)", CEPGP.LootChannel);
-				end
-			end
+			CEPGP_addResponse(name, response, roll);
+			CEPGP_UpdateLootScrollBar(true);
+		end);
+		
+		if not success then
+			CEPGP_print("Error encountered while processing responses", true);
+			CEPGP_print(failMsg);
 		end
-		CEPGP_addResponse(name, response, roll);
-		CEPGP_UpdateLootScrollBar(true);
 		
 	elseif event == "CHAT_MSG_WHISPER" and string.lower(arg1) == "!info" then
 		if CEPGP_getGuildInfo(arg2) ~= nil then

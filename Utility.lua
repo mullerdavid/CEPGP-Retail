@@ -534,7 +534,8 @@ function CEPGP_addResponse(player, response, roll)
 	if player == UnitName("player") then
 		CEPGP_respond:Hide();
 	end
-	if CEPGP_ntgetn(CEPGP_Info.Loot.ItemsTable) >= CEPGP_Info.Loot.NumOnline and CEPGP.Loot.DelayResponses then
+	
+	if not CEPGP_Info.Loot.Expired and (CEPGP_ntgetn(CEPGP_Info.Loot.ItemsTable) >= CEPGP_Info.Loot.NumOnline and CEPGP.Loot.DelayResponses) then
 		CEPGP_announceResponses();
 	end
 end
@@ -2389,7 +2390,7 @@ function CEPGP_callItem(id, gp, buttons, timeout)
 			end
 			if timer == 0 then
 				CEPGP_distribute_time:SetText("Response Time Expired");
-				if CEPGP_isML == 0 then
+				if CEPGP_isML() == 0 and CEPGP.Loot.DelayResponses then
 					CEPGP_announceResponses();
 				end
 				CEPGP_Info.Loot.Expired = true;

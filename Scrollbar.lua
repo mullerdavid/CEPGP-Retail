@@ -588,7 +588,8 @@ function CEPGP_UpdateTrafficScrollBar()
 				[8] = item,
 				[9] = tStamp,
 				[10] = ID,
-				[11] = GUID
+				[11] = GUID,
+				[12] = i	--	entry ID
 			};
 			matches = matches + 1;
 		elseif search == "" then
@@ -603,7 +604,8 @@ function CEPGP_UpdateTrafficScrollBar()
 				[8] = item,
 				[9] = tStamp,
 				[10] = ID,
-				[11] = GUID
+				[11] = GUID,
+				[12] = i	--	entry ID3
 			};
 			matches = matches + 1;
 		end
@@ -628,14 +630,18 @@ function CEPGP_UpdateTrafficScrollBar()
 	if #results > 0 then
 		C_Timer.NewTicker(0.0001, function()
 			if search ~= CEPGP_traffic_search:GetText() or lastRun ~= CEPGP_Info.LastRun.TrafficSB then return; end -- Terminates the previous search if the query changes
-			if not _G["TrafficButton" .. i] then
-				local frame = CreateFrame('Button', "TrafficButton" .. i, _G["CEPGP_traffic_scrollframe_container"], "trafficButtonTemplate");
+			local frame;
+			if _G["TrafficButton" .. i] then
+				frame = _G["TrafficButton" .. i];
+			else
+				frame = CreateFrame('Button', "TrafficButton" .. i, _G["CEPGP_traffic_scrollframe_container"], "trafficButtonTemplate");
 			end
 			if i ~= #results then
 				_G["TrafficButton" .. i]:SetPoint("TOPLEFT", _G["TrafficButton" .. i+1], "BOTTOMLEFT", 0, -2);
 			else
 				_G["TrafficButton" .. i]:SetPoint("TOPLEFT", _G["CEPGP_traffic_scrollframe_container"], "TOPLEFT", 7.5, -10);
 			end
+			frame:SetAttribute("id", results[i][12]);
 			local _, class = CEPGP_getPlayerClass(results[i][1]);
 			local _, issuerClass = CEPGP_getPlayerClass(results[i][2]);
 			local colour, issuerColour = class, issuerClass;

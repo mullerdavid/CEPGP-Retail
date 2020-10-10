@@ -21,8 +21,7 @@ function CEPGP_ListButton_OnClick(obj, button)
 		if strfind(obj, "TrafficButton") and strfind(obj, "Remove") then
 			local id = string.sub(obj, 14, string.find(obj, "Remove")-1);
 			local frame = _G["TrafficButton" .. id];
-			local page = CEPGP_traffic:GetAttribute("page");
-			local entry = id + (page*500);
+			local entry = frame:GetAttribute("id");
 			if frame:GetAttribute("delete_confirm") == "true" then
 				table.remove(CEPGP.Traffic, tonumber(entry));
 				CEPGP_print("Traffic entry " .. entry .. " purged.");
