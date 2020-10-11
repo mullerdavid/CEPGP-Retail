@@ -551,6 +551,7 @@ function CEPGP_GetNumOnlineGroupMembers()
 end
 
 function CEPGP_announceResponses()
+	if not CEPGP_Info.Loot.DistributionID then return; end
 	local responses = {};
 		
 	for _, label in ipairs(CEPGP_Info.LootSchema) do
