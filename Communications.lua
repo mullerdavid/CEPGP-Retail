@@ -29,9 +29,13 @@ function CEPGP_IncAddonMsg(message, sender, channel)
 	if args[1] == "Import" then
 		local option = args[2];
 		
-		local valid = assert(loadstring("return type(CEPGP." .. option .. ");"));
-		if not valid() then
-			return;
+		local node = CEPGP
+		local tmp = CEPGP_split(option, ".");
+		for i = 1, #tmp do
+			node = node[tmp[i]]
+			if node==nil then
+				return
+			end
 		end
 		
 		table.insert(CEPGP_Info.Import.List, option);
