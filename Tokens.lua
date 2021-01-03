@@ -48,14 +48,16 @@ CEPGP_tokens = {
 			[20888] = 65,	-- Ceremonial Ring
 			[20884] = 65	-- Magisterial Ring
 		},
+		["Weapon"] = {
+			[20886] = 70	-- Spiked Hilt -- Exceptions apply - Paladin / Shaman weapon are main hand
+		},
 		["Weaponoffhand"] = {
-			[20886] = 70,	-- Spiked Hilt -- Exceptions apply - Paladin / Shaman weapon are main hand
 			[21232] = 79,	-- Imperial Qiraji Armaments -- Can also be a ranged weapon or shield
 		},
 		["Weaponmainhand"] = {
 			[20890] = 70	-- Ornate Hilt
 		},
-		["TwoHweapon"] = {
+		["2HWeapon"] = {
 			[21237] = 79	-- Imperial Qiraji Regalia -- Can also be a one-handed weapon
 		},
 		["Feet"] = {
@@ -69,6 +71,10 @@ CEPGP_tokens = {
 		["Legs"] = {
 			[20927] = 81,	-- Ouro's Intact Hide
 			[20931] = 81	-- Skin of the Great Sandworm
+		},
+		["Head"] = {
+			[20930] = 81,	--	Vek'lord's Diadem
+			[20926] = 81	--	Vek'nilash's Circlet
 		}
 	},
 
