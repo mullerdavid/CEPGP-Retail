@@ -105,19 +105,19 @@ function CEPGP_announce(link, x, slotNum, quantity)
 		end
 		table.insert(temp, schema);
 		
-		if CEPGP.Loot.RaidVisibility[1] or CEPGP.Loot.RaidVisibility[2] then
-			for _, schema in ipairs(temp) do
-				CEPGP_sendLootMessage(schema);
-			end
+		--if CEPGP.Loot.RaidVisibility[1] or CEPGP.Loot.RaidVisibility[2] then
+		for _, schema in ipairs(temp) do
+			CEPGP_addAddonMsg(schema, "RAID");
 		end
+		--end
 		
 		CEPGP_Info.Loot.Distributing = true;
 		CEPGP_toggleGPEdit(false);
 		CEPGP_Info.Loot.ItemsTable = {};
 		CEPGP_Info.Loot.DistributionID = id;
 		CEPGP_Info.Loot.Master = UnitName("player");
-		CEPGP_SendAddonMsg("CEPGP_setDistID;" .. id, "RAID");
-		CEPGP_SendAddonMsg("CEPGP_setLootGUID;" .. CEPGP_Info.Loot.GUID, "RAID");
+		CEPGP_addAddonMsg("CEPGP_setDistID;" .. id, "RAID");
+		CEPGP_addAddonMsg("CEPGP_setLootGUID;" .. CEPGP_Info.Loot.GUID, "RAID");
 		CEPGP_Info.Loot.DistEquipSlot = slot;
 		gp = _G[CEPGP_Info.Mode..'itemGP'..x]:GetText();
 		CEPGP_Info.Loot.SlotNum = slotNum;
@@ -146,7 +146,7 @@ function CEPGP_announce(link, x, slotNum, quantity)
 		--	Messages are much faster when sent via the WHISPER channel, so a delay is needed so the distribution ID can be set in time
 		--C_Timer.After(1, function()
 			--[[if CEPGP.Loot.RaidVisibility[2] then
-				CEPGP_SendAddonMsg("RaidAssistLootDist;"..link..";"..gp..";true", "RAID");
+				CEPGP_addAddonMsg("RaidAssistLootDist;"..link..";"..gp..";true", "RAID");
 			elseif CEPGP.Loot.RaidVisibility[1] then
 				CEPGP_messageGroup("RaidAssistLootDist;"..link..";"..gp..";true", "assists");
 			end]]
@@ -244,8 +244,8 @@ function CEPGP_announce(link, x, slotNum, quantity)
 		end
 		call = call .. ";" .. tostring(CEPGP.Loot.GUI.Timer) .. ";" .. CEPGP_Info.Loot.GUID;
 		CEPGP_callItem(id, gp, buttons, CEPGP.Loot.GUI.Timer);
-		--CEPGP_SendAddonMsg(call, "RAID");
-		CEPGP_SendAddonMsg(call, "RAID");
+		--CEPGP_addAddonMsg(call, "RAID");
+		CEPGP_addAddonMsg(call, "RAID");
 		
 			
 		CEPGP_distribute:Show();

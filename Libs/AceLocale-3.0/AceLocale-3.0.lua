@@ -1,6 +1,12 @@
--- Slightly modified port of AceLocale-3.0 as CEPGP has no AceLibraries included (yet?)
--- Although the whole thing is still composed the way it can easily be switched to AceLocale the time CEPGP decide to include AceLibraries
-CEPGP_Locale = {}
+--- **AceLocale-3.0** manages localization in addons, allowing for multiple locale to be registered with fallback to the base locale for untranslated strings.
+-- @class file
+-- @name AceLocale-3.0
+-- @release $Id: AceLocale-3.0.lua 1035 2011-07-09 03:20:13Z kaelten $
+local MAJOR,MINOR = "AceLocale-3.0", 6
+
+local AceLocale, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
+
+if not AceLocale then return end -- no upgrade needed
 
 -- Lua APIs
 local assert, tostring, error = assert, tostring, error
@@ -15,14 +21,14 @@ if gameLocale == "enGB" then
 	gameLocale = "enUS"
 end
 
-CEPGP_Locale.apps = CEPGP_Locale.apps or {}          -- array of ["AppName"]=localetableref
-CEPGP_Locale.appnames = CEPGP_Locale.appnames or {}  -- array of [localetableref]="AppName"
+AceLocale.apps = AceLocale.apps or {}          -- array of ["AppName"]=localetableref
+AceLocale.appnames = AceLocale.appnames or {}  -- array of [localetableref]="AppName"
 
 -- This metatable is used on all tables returned from GetLocale
 local readmeta = {
 	__index = function(self, key) -- requesting totally unknown entries: fire off a nonbreaking error and return key
 		rawset(self, key, key)      -- only need to see the warning once, really
-		geterrorhandler()(MAJOR..": "..tostring(CEPGP_Locale.appnames[self])..": Missing entry for '"..tostring(key).."'")
+		geterrorhandler()(MAJOR..": "..tostring(AceLocale.appnames[self])..": Missing entry for '"..tostring(key).."'")
 		return key
 	end
 }
@@ -84,12 +90,12 @@ local writedefaultproxy = setmetatable({}, {
 -- if not L then return end
 -- L["string1"] = "Zeichenkette1"
 -- @return Locale Table to add localizations to, or nil if the current locale is not required.
-function CEPGP_Locale:NewLocale(application, locale, isDefault, silent)
+function AceLocale:NewLocale(application, locale, isDefault, silent)
 
 	-- GAME_LOCALE allows translators to test translations of addons without having that wow client installed
 	local gameLocale = GAME_LOCALE or gameLocale
 
-	local app = CEPGP_Locale.apps[application]
+	local app = AceLocale.apps[application]
 
 	if silent and app and getmetatable(app) ~= readmetasilent then
 		geterrorhandler()("Usage: NewLocale(application, locale[, isDefault[, silent]]): 'silent' must be specified for the first locale registered")
@@ -101,8 +107,8 @@ function CEPGP_Locale:NewLocale(application, locale, isDefault, silent)
 		else
 			app = setmetatable({}, silent and readmetasilent or readmeta)
 		end
-		CEPGP_Locale.apps[application] = app
-		CEPGP_Locale.appnames[app] = application
+		AceLocale.apps[application] = app
+		AceLocale.appnames[app] = application
 	end
 
 	if locale ~= gameLocale and not isDefault then
@@ -123,9 +129,9 @@ end
 -- @param application Unique name of addon / module
 -- @param silent If true, the locale is optional, silently return nil if it's not found (defaults to false, optional)
 -- @return The locale table for the current language.
-function CEPGP_Locale:GetLocale(application, silent)
-	if not silent and not CEPGP_Locale.apps[application] then
+function AceLocale:GetLocale(application, silent)
+	if not silent and not AceLocale.apps[application] then
 		error("Usage: GetLocale(application[, silent]): 'application' - No locales registered for '"..tostring(application).."'", 2)
 	end
-	return CEPGP_Locale.apps[application]
+	return AceLocale.apps[application]
 end

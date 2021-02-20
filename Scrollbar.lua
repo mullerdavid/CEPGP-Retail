@@ -249,17 +249,17 @@ function CEPGP_UpdateGuildScrollBar()
 			count = count + 1;
 		end
 	end
+	if #tempTable == 0 then return; end
 	tempTable = CEPGP_tSort(tempTable, CEPGP_Info.Sorting.Guild[1], CEPGP_Info.Sorting.Guild[2]);
 	local kids = {_G["CEPGP_guild_scrollframe_container"]:GetChildren()};
 	for index, child in ipairs(kids) do
-		if index > CEPGP_ntgetn(CEPGP_Info.Guild.Roster) then
+		if index > CEPGP_ntgetn(CEPGP_Info.Guild.Roster) or index > #tempTable then
 			child:Hide();
 			--child = nil;
 		end
 		--child:Hide();
 	end
 	local i = 1;
-
 	C_Timer.NewTicker(0.0001, function()
 		if CEPGP_Info.LastRun.GuildSB ~= call then
 			quit = true;
@@ -734,6 +734,7 @@ function CEPGP_UpdateStandbyScrollBar()
 	for _, child in ipairs(kids) do
 		child:Hide();
 	end
+	CEPGP_tSort(CEPGP.Standby.Roster, CEPGP_Info.Sorting.Standby[1], CEPGP_Info.Sorting.Standby[2]);
 	for i = 1, CEPGP_ntgetn(CEPGP.Standby.Roster) do
 		local frame;
 		
@@ -1253,10 +1254,40 @@ function CEPGP_UpdateLogScrollBar()
 		local content =			logs[i][5] or "|cFFFF0000nil|r";
 		local channel = 		logs[i][6] or "|cFFFF0000nil|r";
 
-		local state = (msgType == "attempt" and "|cFFF5B342Reattempting|r") or (msgType == "abandoned" and "|cFFFF0000Abandoned|r")	or (msgType == "received" and "|cFF03A9FCReceived|r") or (msgType == "sent" and "|cFF00FF00Sent|r") or (msgType == "whisper" and "|cFF7A00ABUntraceable|r");
+		local state = (msgType == "queued" and "|cFFFFFFFFQueued|r") or
+						(msgType == "attempt" and "|cFFF5B342Attempting|r") or
+						(msgType == "abandoned" and "|cFFFF0000Abandoned|r") or
+						(msgType == "received" and "|cFF03A9FCReceived|r") or
+						(msgType == "sent" and "|cFF00FF00Sent|r") or
+						(msgType == "whisper" and "|cFF7A00ABUntraceable|r") or
+						(msgType == "error" and "cFFFF0000Error|r");
 		str = str .. date("%H:%M:%S", absTime) .. ": Source: " .. source .. ", Scope: " .. destination .. ", Channel: " .. channel .. ", State: " .. state .. "\nContent: " .. content .. "\n\n";
 	end
 	CEPGP_log_container:SetText(str);
 	CEPGP_log_num:SetText("Showing last " .. #logs .. " messages");
 end
 
+function CEPGP_UpdateTradeableScrollBar(itemPool)
+	local kids = {_G["CEPGP_bag_items_scrollframe_container"]:GetChildren()};
+	for _, child in ipairs(kids) do
+		child:Hide();
+	end
+	for i = 1, #itemPool do
+		local frame;
+		if not _G["CEPGPTradeableItem" .. i] then
+			frame = CreateFrame('Button', "CEPGPTradeableItem" .. i, _G["CEPGP_bag_items_scrollframe_container"], "CEPGPBagItemTemplate");
+			if i == 1 then
+				_G["CEPGPTradeableItem" .. i]:SetPoint("TOPLEFT", _G["CEPGP_bag_items_scrollframe_container"], "TOPLEFT", 0, -10);
+			else
+				_G["CEPGPTradeableItem" .. i]:SetPoint("TOPLEFT", _G["CEPGPTradeableItem" .. i-1], "BOTTOMLEFT", 0, -2);
+			end
+		end
+		_G["CEPGPTradeableItem" .. i]:SetAttribute('itemID', itemPool[i][1]);
+		_G["CEPGPTradeableItem" .. i]:SetAttribute('itemGUID', itemPool[i][2]);
+		
+		local name, link, rarity, tex = itemPool[i][3], itemPool[i][4], itemPool[i][5], itemPool[i][6];
+		
+		_G["CEPGPTradeableItem" .. i .. "_name_text"]:SetText(link);
+		_G["CEPGPTradeableItem" .. i .. "_icon_tex"]:SetTexture(tex);
+	end
+end

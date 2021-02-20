@@ -1,4 +1,4 @@
-local L = CEPGP_Locale:GetLocale("CEPGP");
+local L = LibStub("AceLocale-3.0"):GetLocale("CEPGP");
 
 function CEPGP_ListButton_OnClick(obj, button)
 	if button == "LeftButton" then
@@ -58,6 +58,15 @@ function CEPGP_ListButton_OnClick(obj, button)
 			return;
 		end
 		
+		if obj == "CEPGP_filter_rank_confirm" then
+			for i = 1, 10 do
+				CEPGP.Guild.Filter[i] = _G["CEPGP_filter_rank_" .. i .. "_check"]:GetChecked();
+			end
+			CEPGP_rosterUpdate("GUILD_ROSTER_UPDATE");
+			CEPGP_rank_filter:Hide();
+			return;
+		end
+		
 		--
 		--	The following should be only accessible to those with edit access (i.e. officers)
 		--
@@ -112,7 +121,7 @@ function CEPGP_ListButton_OnClick(obj, button)
 				if CEPGP.Standby.Roster[i][1] == name then
 					table.remove(CEPGP.Standby.Roster, i);
 					if CEPGP_isML() == 0 and CEPGP.Standby.Share then
-						CEPGP_SendAddonMsg("StandbyListRemove;" .. CEPGP.Standby.Roster[i][1]);
+						CEPGP_addAddonMsg("StandbyListRemove;" .. CEPGP.Standby.Roster[i][1]);
 					end
 					break;
 				end
@@ -140,16 +149,6 @@ function CEPGP_ListButton_OnClick(obj, button)
 			return;
 		end
 		
-		if obj == "CEPGP_filter_rank_confirm" then
-			for i = 1, 10 do
-				CEPGP.Guild.Filter[i] = _G["CEPGP_filter_rank_" .. i .. "_check"]:GetChecked();
-			end
-			CEPGP_print("Updated Guild Roster Filter");
-			CEPGP_rosterUpdate("GUILD_ROSTER_UPDATE");
-			CEPGP_rank_filter:Hide();
-			return;
-		end
-		
 		if obj == "CEPGP_standby_ep_list_add" then
 			if not CanEditOfficerNote() and not CEPGP_Info.Debug then
 				CEPGP_print("You cannot add players to standby because you cannot modify EPGP", 1);
@@ -167,7 +166,8 @@ function CEPGP_ListButton_OnClick(obj, button)
 			CEPGP_context_popup_confirm:SetScript('OnClick', function()
 				PlaySound(799);
 				HideUIPanel(CEPGP_context_popup);
-				CEPGP_addToStandby(CEPGP_context_amount:GetText());
+				local name = CEPGP_context_amount:GetText();
+				CEPGP_addToStandby(name);
 			end);
 			return;
 		end
@@ -186,6 +186,7 @@ function CEPGP_ListButton_OnClick(obj, button)
 			local function addRankToStandby()
 				local group = {};
 				local ranks = {};
+				local playerList = {};
 				
 				for i = 1, GetNumGroupMembers() do
 					local name = GetRaidRosterInfo(i);
@@ -198,13 +199,14 @@ function CEPGP_ListButton_OnClick(obj, button)
 						ranks[i] = false;
 					end
 				end
+				
 				for i = 1, GetNumGuildMembers() do
 					local name, _, rIndex = GetGuildRosterInfo(i);
 					name = Ambiguate(name, "all");
 					if ranks[rIndex+1] and not CEPGP_tContains(CEPGP.Standby.Roster, name) and not CEPGP_tContains(group, name) and name ~= UnitName("player") then
 						local _, class, rank, _, oNote, _, classFile = CEPGP_getGuildInfo(name);
 						local EP,GP = CEPGP_getEPGP(name, i);
-						CEPGP.Standby.Roster[#CEPGP.Standby.Roster+1] = {
+						local entry = {
 							[1] = name,
 							[2] = class,
 							[3] = rank,
@@ -213,15 +215,12 @@ function CEPGP_ListButton_OnClick(obj, button)
 							[6] = GP,
 							[7] = math.floor((tonumber(EP)*100/tonumber(GP)))/100,
 							[8] = classFile
-						};
-						if CEPGP.Standby.Share then
-							CEPGP_SendAddonMsg("StandbyListAdd;"..name..";"..class..";"..rank..";"..rIndex..";"..EP..";"..GP..";"..classFile, "RAID");
-						end
+						}
+						table.insert(playerList, entry);
 					end
 				end
-				if CEPGP_standby_options:IsVisible() then
-					CEPGP_UpdateStandbyScrollBar();
-				end
+				
+				CEPGP_addToStandby(nil, playerList);
 			end
 			
 			--[[if CEPGP_ntgetn(CEPGP_Info.Guild.Roster) < GetNumGuildMembers() and CEPGP_Info.Guild.Polling then
