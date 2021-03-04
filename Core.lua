@@ -174,7 +174,7 @@ CEPGP_Info = {
 		Source =				""
 	},
 	Version = 					{
-		Number =				"1.13.6",
+		Number =				"1.13.7",
 		Build =					"Release",
 		List =					{
 		},
@@ -529,7 +529,9 @@ function CEPGP_AddRaidEP(amount, msg, encounter)
 		
 		for main, data in pairs(CEPGP.Alt.Links) do
 			for _, alt in ipairs(data) do
-				alts[alt] = main;
+				if CEPGP_Info.Guild.Roster[alt] and CEPGP_Info.Guild.Roster[main] then
+					alts[alt] = main;
+				end
 			end
 		end
 		
@@ -608,26 +610,6 @@ function CEPGP_AddRaidEP(amount, msg, encounter)
 								end
 							end
 						end
-
-						--[[
-						for alt, main in pairs(alts) do
-							if CEPGP_Info.Guild.Roster[alt] then
-								local mainIndex = CEPGP_getIndex(main, CEPGP_Info.Guild.Roster[main][1]);
-								local mEP, mGP = CEPGP_getEPGP(main, mainIndex);
-								
-								local altIndex = CEPGP_getIndex(alt, CEPGP_Info.Guild.Roster[alt][1]);
-								local EP, GP = CEPGP_getEPGP(alt, altIndex);
-								
-								if CEPGP.Alt.SyncEP and CEPGP.Alt.SyncGP then
-									GuildRosterSetOfficerNote(altIndex, mEP .. "," .. mGP);
-								elseif CEPGP.Alt.SyncEP then
-									GuildRosterSetOfficerNote(altIndex, mEP .. "," .. GP);
-								elseif CEPGP.Alt.SyncGP then
-									GuildRosterSetOfficerNote(altIndex, EP .. "," .. mGP);
-								end
-							end
-						end
-						--]]
 					end
 				end
 			end
@@ -674,7 +656,6 @@ function CEPGP_addGuildEP(amount, msg)
 			end
 		end
 		
-		local alts = {};
 		local roster = {};
 		local syncEP, syncGP, blockAlts = CEPGP.Alt.SyncEP, CEPGP.Alt.SyncGP, CEPGP.Alt.BlockAwards;
 		
@@ -689,7 +670,6 @@ function CEPGP_addGuildEP(amount, msg)
 		
 		for main, data in pairs(CEPGP.Alt.Links) do
 			for _, alt in ipairs(data) do
-				alts[alt] = main;
 				if syncEP or blockAlts then
 					roster[alt] = nil;
 				end
@@ -719,25 +699,6 @@ function CEPGP_addGuildEP(amount, msg)
 			end
 
 		end
-		--[[
-		if CEPGP.Alt.SyncEP or CEPGP.Alt.SyncGP then
-			for alt, main in pairs(alts) do
-				if CEPGP_Info.Guild.Roster[alt] then
-					local mEP, mGP = roster[main][2], roster[main][3];
-					local altIndex = CEPGP_getIndex(alt, CEPGP_Info.Guild.Roster[alt][1]);
-					local EP, GP = CEPGP_getEPGP(alt, altIndex);
-					
-					if CEPGP.Alt.SyncEP and CEPGP.Alt.SyncGP then
-						GuildRosterSetOfficerNote(altIndex, mEP .. "," .. mGP);
-					elseif CEPGP.Alt.SyncEP then
-						GuildRosterSetOfficerNote(altIndex, mEP .. "," .. GP);
-					elseif CEPGP.Alt.SyncGP then
-						GuildRosterSetOfficerNote(altIndex, EP .. "," .. mGP);
-					end
-				end
-			end
-		end
-		]]
 		update();
 	end);
 	if not success then
@@ -823,7 +784,9 @@ function CEPGP_addStandbyEP(amount, boss, msg)
 		
 		for main, data in pairs(CEPGP.Alt.Links) do
 			for _, alt in ipairs(data) do
-				alts[alt] = main;
+				if CEPGP_Info.Guild.Roster[alt] and CEPGP_Info.Guild.Roster[main] then
+					alts[alt] = main;
+				end
 				if ((roster[main] and roster[alt]) and syncEP) or	--	If both the main and alt are present AND EP is being synchronised
 					blockAlts then
 					roster[alt] = nil;	--	Ensures there are no double awards
@@ -894,22 +857,6 @@ function CEPGP_addStandbyEP(amount, boss, msg)
 					end
 				end
 			end
-			--[[
-			if syncEP then
-				if CEPGP.Alt.Links[name] then
-					for _, altName in ipairs(CEPGP.Alt.Links[name]) do
-						local altIndex = CEPGP_getIndex(altName, CEPGP_Info.Guild.Roster[altName][1]);
-						local mEP, mGP = roster[name][2], roster[name][3];
-						local _, GP = CEPGP_getEPGP(altName, altIndex);	--	No need to get the alt's current EP as it won't be used
-						if syncGP then
-							GuildRosterSetOfficerNote(altIndex, mEP .. "," .. mGP);
-						else
-							GuildRosterSetOfficerNote(altIndex, mEP .. "," .. GP);
-						end
-					end
-				end
-			end
-			]]
 		end
 	end);
 	
@@ -935,14 +882,16 @@ function CEPGP_addGP(player, amount, itemID, itemLink, msg, response)
 		for _main, data in pairs(CEPGP.Alt.Links) do
 			for _, alt in ipairs(data) do
 				if alt == player then
-					EP, GP = CEPGP_getEPGP(_main, CEPGP_Info.Guild.Roster[_main][1]);
-					GPB = GP;
-					main = {
-						[1] = _main,
-						[2] = EP,
-						[3] = GP
-					};
-					break;
+					if CEPGP_Info.Guild.Roster[alt] and CEPGP_Info.Guild.Roster[_main] then
+						EP, GP = CEPGP_getEPGP(_main, CEPGP_Info.Guild.Roster[_main][1]);
+						GPB = GP;
+						main = {
+							[1] = _main,
+							[2] = EP,
+							[3] = GP
+						};
+						break;
+					end
 				end
 			end
 			if main then break; end
@@ -1077,13 +1026,15 @@ function CEPGP_addEP(player, amount, msg)
 			for _main, data in pairs(CEPGP.Alt.Links) do
 				for _, alt in ipairs(data) do
 					if alt == player then
-						EP, GP = CEPGP_getEPGP(_main, CEPGP_Info.Guild.Roster[_main][1]);
-						main = {
-							[1] = _main,
-							[2] = EP,
-							[3] = GP
-						};
-						break;
+						if CEPGP_Info.Guild.Roster[alt] and CEPGP_Info.Guild.Roster[_main] then
+							EP, GP = CEPGP_getEPGP(_main, CEPGP_Info.Guild.Roster[_main][1]);
+							main = {
+								[1] = _main,
+								[2] = EP,
+								[3] = GP
+							};
+							break;
+						end
 					end
 				end
 				if main then break; end

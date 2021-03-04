@@ -1413,49 +1413,41 @@ function CEPGP_initMessageQueue()
 		if #CEPGP_Info.MessageStack > 0 then
 			local lastSend = 0; -- Time since the last successful send
 			for index, data in ipairs(CEPGP_Info.MessageStack) do
-				local success, failMsg = pcall(function()
-					errorIndex = index;
-					local delete = data[5];
-					if delete then
-						table.remove(CEPGP_Info.MessageStack, index);
+				errorIndex = index;
+				local delete = data[5];
+				if delete then
+					table.remove(CEPGP_Info.MessageStack, index);
+				else
+					local tStamp = GetTime();
+					local message, channel, player = data[1], data[2], data[3];
+					table.insert(CEPGP_Info.Logs, {time(), "attempt", UnitName("player"), player, message, channel});
+					if #CEPGP_Info.Logs >= 501 then
+						table.remove(CEPGP_Info.Logs, 1);
+					end
+					if tStamp - period >= 1 then
+						period = tStamp;
+						length = 0;
+					end
+					if length + #message >= 750 and tStamp - lastSend < 1 then
+						local delay = 1 - (tStamp - lastSend) + 0.25; -- 0.2 second margin added for safety
+						C_Timer.After(delay, function() processQueue(); end);
+						return;
 					else
-						local tStamp = GetTime();
-						local message, channel, player = data[1], data[2], data[3];
-						table.insert(CEPGP_Info.Logs, {time(), "attempt", UnitName("player"), player, message, channel});
-						if #CEPGP_Info.Logs >= 501 then
-							table.remove(CEPGP_Info.Logs, 1);
-						end
-						if tStamp - period >= 1 then
-							period = tStamp;
-							length = 0;
-						end
-						if length + #message >= 750 and tStamp - lastSend < 1 then
-							local delay = 1 - (tStamp - lastSend) + 0.25; -- 0.2 second margin added for safety
-							C_Timer.After(delay, function() processQueue(); end);
-							return;
-						else
-							local lastAttempt = data[4]; -- Last time a certain message attempted to send. Prevents messages from reattempting too soon
-							if tStamp - lastAttempt > 0.5 then
-								CEPGP_Info.MessageStack[index][4] = tStamp;
-								lastSend = tStamp;
-								length = length + #message;
-								CEPGP_SendAddonMsg({message, channel, player});
-								if channel == "WHISPER" then
-									CEPGP_Info.MessageStack[index][5] = true;
-									table.insert(CEPGP_Info.Logs, {time(), "whisper", UnitName("player"), player, message, channel});
-									if #CEPGP_Info.Logs >= 501 then
-										table.remove(CEPGP_Info.Logs, 1);
-									end
+						local lastAttempt = data[4]; -- Last time a certain message attempted to send. Prevents messages from reattempting too soon
+						if tStamp - lastAttempt > 0.5 then
+							CEPGP_Info.MessageStack[index][4] = tStamp;
+							lastSend = tStamp;
+							length = length + #message;
+							CEPGP_SendAddonMsg({message, channel, player});
+							if channel == "WHISPER" then
+								CEPGP_Info.MessageStack[index][5] = true;
+								table.insert(CEPGP_Info.Logs, {time(), "whisper", UnitName("player"), player, message, channel});
+								if #CEPGP_Info.Logs >= 501 then
+									table.remove(CEPGP_Info.Logs, 1);
 								end
 							end
 						end
 					end
-				end);
-				
-				if not success then
-					table.insert(CEPGP_Info.Logs, {time(), "error", UnitName("player"), player, message, channel});
-					table.remove(CEPGP_Info.MessageStack, errorIndex);
-					C_Timer.After(0.25, function() processQueue() end);
 				end
 			end
 			C_Timer.After(0.25, function() processQueue() end);
@@ -1471,6 +1463,9 @@ end
 function CEPGP_addAddonMsg(message, channel, player)
 	table.insert(CEPGP_Info.MessageStack, {message, channel, player, 0, false});
 	table.insert(CEPGP_Info.Logs, {time(), "queued", UnitName("player"), player, message, channel});
+	if #CEPGP_Info.Logs >= 501 then
+		table.remove(CEPGP_Info.Logs, 1);
+	end
 end
 
 function CEPGP_SendAddonMsg(stackItem)

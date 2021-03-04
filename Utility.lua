@@ -844,7 +844,8 @@ function CEPGP_addGPTooltip(frame)
 end
 
 function CEPGP_addGPHyperlink(self, iString)
-	if not string.find(iString, "item:") or not CEPGP_isGPTooltip() then return; end	local id = CEPGP_getItemID(iString);
+	if not string.find(iString, "item:") or not CEPGP_isGPTooltip() then return; end
+	local id = CEPGP_getItemID(iString);
 	local name = GetItemInfo(id);
 	for i = 1, ItemRefTooltip:NumLines() do
 		if string.find(_G["ItemRefTooltipTextLeft"..i]:GetText(), "GP Value:") then return end;
