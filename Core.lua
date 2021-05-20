@@ -206,8 +206,8 @@ CEPGP_Info = {
 		Source =				""
 	},
 	Version = 					{
-		Number =				"1.14.0 mod",
-		Build =					"Release",
+		Number =				"1.14.0",
+		Build =					"Release Mod",
 		List =					{
 		},
 		ListSearch =			"GUILD",
