@@ -310,6 +310,7 @@ function CEPGP_IncAddonMsg(message, channel, sender)
 			[7] = math.floor((tonumber(EP)*100/tonumber(GP)))/100,
 			[8] = classFile
 		};
+		CEPGP_print(player.." added to standby list.");
 		if CEPGP_standby_options:IsVisible() then
 			CEPGP_UpdateStandbyScrollBar();
 		end

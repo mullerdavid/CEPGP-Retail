@@ -4,25 +4,17 @@
 	<Script File="Utility.lua"/>
 	<Script File="Core.lua"/>
 		
-	<Frame name="CEPGP_frame" parent="UIParent" hidden="true" enableMouse="true" toplevel="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_frame" parent="UIParent" hidden="true" enableMouse="true" toplevel="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="600" y="480" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Frames>
 			<Button name="CEPGP_button_guild" inherits="GameMenuButtonTemplate" text="Guild">
 				<Size>
@@ -1128,7 +1120,7 @@
 			</Frame>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterEvent("LOOT_OPENED");
 				self:RegisterEvent("LOOT_CLOSED");
 				self:RegisterEvent("LOOT_SLOT_CLEARED");
@@ -1164,23 +1156,15 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_log" enableMouse="true" movable="true" clampedToScreen="true" hidden="true">
+	<Frame name="CEPGP_log" enableMouse="true" movable="true" clampedToScreen="true" hidden="true" inherits="BackdropTemplate">
 		<Size x="600" y="350" />
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture name="$parent_header_tex" file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -1302,7 +1286,7 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_version" enableMouse="true" hidden="true" movable="true" parent="UIParent" clampedToScreen="true">
+	<Frame name="CEPGP_version" enableMouse="true" hidden="true" movable="true" parent="UIParent" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="450" y="450" />
 		</Size>
@@ -1313,18 +1297,10 @@
 				</Offset>
 			</Anchor>
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Attributes>
 			<Attribute name="offline" type="boolean" value="false" />
 		</Attributes>
@@ -1524,7 +1500,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 			</OnLoad>
 			<OnDragStart>
@@ -1547,7 +1523,7 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_distribute_popup" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" clampedToScreen="true">
+	<Frame name="CEPGP_distribute_popup" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="400" y="100"/>
 		</Size>
@@ -1558,17 +1534,10 @@
 			<Attribute name="response" type="int" value="0" />
 			<Attribute name="responseName" type="string" value=""/>
 		</Attributes>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -1667,7 +1636,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterEvent("UI_ERROR_MESSAGE");
 				self:RegisterForDrag("LeftButton");
 			</OnLoad>
@@ -1687,24 +1656,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_context_popup" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_context_popup" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">>
 		<Size>
 			<AbsDimension x="300" y="175"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -1895,7 +1857,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 			</OnLoad>
 			<OnDragStart>
@@ -1910,24 +1872,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_decay_popup" frameStrata="DIALOG" enableMouse="true" hidden="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_decay_popup" frameStrata="DIALOG" enableMouse="true" hidden="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="300" y="200"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_POPUP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -2100,7 +2055,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 				self:SetScale(0.66);
 			</OnLoad>
@@ -2117,24 +2072,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_award_raid_popup" frameStrata="DIALOG" enableMouse="true" hidden="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_award_raid_popup" frameStrata="DIALOG" enableMouse="true" hidden="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="300" y="200"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_POPUP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -2272,7 +2220,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 				self:SetScale(0.66);
 			</OnLoad>
@@ -2289,24 +2237,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_save_guild_logs" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_save_guild_logs" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="300" y="175"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_POPUP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -2406,7 +2347,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 				CEPGP_guild_log_save_desc:SetText("Name your log\n\nIf you choose a name already in use,\nit will overwrite the existing log.");
 			</OnLoad>
@@ -2422,24 +2363,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_restore_guild_logs" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_restore_guild_logs" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="300" y="175"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_POPUP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -2595,7 +2529,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 				CEPGP_guild_log_restore_desc:SetText("Select the record you would like to restore\n\n|c00FF0000Make sure this is what you want to do.\nThis will overwrite ALL current guild EPGP\nstandings with the record.");
 			</OnLoad>
@@ -2614,24 +2548,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_settings_import" frameStrata="DIALOG" enableMouse="true" parent="UIParent" movable="true" clampedToScreen="true" hidden="true">
+	<Frame name="CEPGP_settings_import" frameStrata="DIALOG" enableMouse="true" parent="UIParent" movable="true" clampedToScreen="true" hidden="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="350" y="400"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_POPUP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -2942,7 +2869,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 				CEPGP_settings_import_desc:SetText("Use this feature to import another player's CEPGP configuration.\n|cFFFF0000Warning! This will overwrite all of your existing settings!|r\nThe player must be in your guild or raid group");
 			</OnLoad>
@@ -2969,24 +2896,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_override" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_override" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="450" y="480"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_POPUP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -3335,7 +3255,7 @@
 			</ScrollFrame>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 				CEPGP_override_desc:SetText("This window allows you to override the gp value\nof an item to what ever you specify.\n|c00FF0000Only enter either an item name OR an item ID|r");
 			</OnLoad>
@@ -3352,24 +3272,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_traffic" frameStrata="HIGH" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_traffic" frameStrata="HIGH" enableMouse="true" parent="UIParent" hidden="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="950" y="480"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_POPUP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Attributes>
 			<Attribute name="page" type="int" value="0" />
 		</Attributes>
@@ -3761,7 +3674,7 @@
 			</ScrollFrame>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 				self:EnableKeyboard(true);
 				CEPGP_traffic_name:SetPoint("BOTTOMLEFT", trafficScrollFrame, "TOPLEFT", 7.5, 5);
@@ -3785,25 +3698,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_notice_frame" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_notice_frame" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="0" y="350" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -3881,7 +3786,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				CEPGP_notice_text:SetText("Thank you for choosing to use Classic EPGP!\nI hope that you enjoy using this addon and I hope that it helps your guild\nhow ever you end up using it.\n\nJust one thing you should know - this addon needs to have\nfull control over your officer notes to maintain EPGP records.\nMeaning, as this addon attempts to maintain your records, it will overwrite\nany existing officer notes. Similarly, if you want your guild members to\nbe able to see their EP and GP values, they need to be able to see\nofficer notes too. Essentially, the addon can only see what you can see.\n\nThis addon is designed and really does work best if your\nyour whole guild (or at least your raid team) has it installed.\nThis will provide you with functions like loot council support\nand being able to see what items your raid members are wearing\nwhen you're distributing items.\n\nI hope you enjoy using the addon and if you have any feature requests or\nfind a bug, please submit a ticket on the addon GitHub page:\ngithub.com/Alumian/CEPGP-Retail");
 				CEPGP_notice_frame:SetWidth(CEPGP_notice_text:GetStringWidth()+25);
 			</OnLoad>
@@ -3897,7 +3802,7 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_attendance" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_attendance" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<size>
 			<AbsDimension x="650" y="425" />
 		</size>
@@ -4275,18 +4180,10 @@
 				</ScrollChild>
 			</ScrollFrame>
 		</Frames>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Scripts>
 			<OnMouseDown>
 				self:StartMoving();
@@ -4300,22 +4197,14 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="CEPGP_respond" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_respond" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<size>
 			<AbsDimension x="420" y="150" />
 		</size>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
@@ -4542,25 +4431,17 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="CEPGP_export" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_export" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="600" y="275" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Attributes>
 			<Attribute name="format" type="string" value="CSV" />
 		</Attributes>
@@ -4896,25 +4777,17 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="CEPGP_confirmation" parent="UIParent" hidden="true" enableMouse="true" toplevel="true" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_confirmation" parent="UIParent" hidden="true" enableMouse="true" toplevel="true" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="300" y="100" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString name="CEPGP_confirmation_desc" inherits="GameFontNormal">
@@ -4973,7 +4846,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				CEPGP_confirmation_desc:SetText("Would you like to use CEPGP for this raid?");
 			</OnLoad>
 			<OnShow>
@@ -4982,25 +4855,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_standby_addRank" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_standby_addRank" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="300" y="200" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString name="CEPGP_standby_addRank_1" inherits="GameFontNormal">
@@ -5293,7 +5158,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnShow>
+			<OnShow inherit="prepend">
 				for i = 1, 10 do
 					if GuildControlGetRankName(i) ~= "" then
 						_G["CEPGP_standby_addRank_"..i]:Show();
@@ -5310,25 +5175,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_rank_exclude" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_rank_exclude" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="300" y="200" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString name="CEPGP_rank_exclude_header" inherits="GameFontNormal" text="Rank Exclusions">
@@ -5672,25 +5529,17 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_rank_filter" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_rank_filter" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension y="270" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString name="CEPGP_rank_filter_header" inherits="GameFontNormal" text="Guild List Filtering">
@@ -6031,32 +5880,24 @@
 				end
 				CEPGP_localise(self);
 			</OnShow>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				CEPGP_rank_filter_desc:SetText("Want to hide a rank from the guild list?\nTick the box next to the rank you want to hide.\n\nNote: This will not exclude the rank from decay!\nTo exclude a rank from EPGP modifications,\nsee the rank exclusions menu in options.");
 				self:SetWidth(CEPGP_rank_filter_desc:GetStringWidth()+40);
 			</OnLoad>
 		</Scripts>
 	</Frame>
 
-	<Frame name="CEPGP_import" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_import" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="600" y="275" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Attributes>
 			<Attribute name="format" type="string" value="CSV" />
 		</Attributes>
@@ -6254,7 +6095,7 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				CEPGP_import_guide_text:SetText("Paste a CSV formatted string in to\nthe box on the left and then\nclick the \"Import Standings\" button\nto confirm the changes.\nThe expected format to use is:\nplayer,EP,GP, (Include the\ntrailing comma after GP).\n\nA record of your guild standings\nwill be automatically saved incase\nyou need to revert the changes.");
 			</OnLoad>
 			<OnMouseDown>
@@ -6269,22 +6110,14 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="CEPGP_roll_award_confirm" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_roll_award_confirm" parent="UIParent" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="400" y="100" />
 		</Size>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
@@ -6406,22 +6239,14 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_license" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_license" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<Color r="0" g="0" b="0" />
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString name="$parent_heading" inherits="GameFontNormal" text="Classic EPGP End User License Agreement"/>
@@ -6468,22 +6293,15 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_raid_modifiers" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true">
+	<Frame name="CEPGP_raid_modifiers" hidden="true" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" inherits="BackdropTemplate">
 		<Size x="250" y="300" />
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_POPUP" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString name="$parent_heading" inherits="GameFontNormalLarge" text="Global Raid GP Modifiers">
@@ -6964,7 +6782,7 @@
 			</EditBox>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 			</OnLoad>
 			<OnDragStart>
@@ -6981,19 +6799,12 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="CEPGP_bag_items_frame" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" hidden="true">
+	<Frame name="CEPGP_bag_items_frame" enableMouse="true" frameStrata="DIALOG" movable="true" clampedToScreen="true" hidden="true" inherits="BackdropTemplate">
 		<Size x="200" y="250" />
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="4" right="4" top="4" bottom="4"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="16"/>
-			</EdgeSize>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="CEPGP_BACKDROP_BAGITEMS" type="global" />
+			<KeyValue key="backdropColor" value="CEPGP_BLACK" type="global" />
+		</KeyValues>
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
@@ -7052,7 +6863,7 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				self:RegisterForDrag("LeftButton");
 				
 				--[[	Frame Sizing	]]--

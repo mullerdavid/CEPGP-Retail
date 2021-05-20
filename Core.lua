@@ -3,6 +3,38 @@
 SLASH_CEPGP1 = "/CEPGP";
 SLASH_CEPGP2 = "/cep";
 
+CEPGP_BACKDROP = {
+	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",	
+	edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+	edgeSize = 32,
+	insets = { left = 11, right = 12, top = 12, bottom = 11 }
+};
+
+CEPGP_BACKDROP_POPUP = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",	
+	edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+	edgeSize = 32,
+	insets = { left = 11, right = 12, top = 12, bottom = 11 }
+};
+
+CEPGP_BACKDROP_BAGITEMS = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",	
+	edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+	edgeSize = 16,
+	insets = { left = 4, right = 4, top = 4, bottom = 4 }
+};
+
+CEPGP_BLACK = CreateColor(0, 0, 0);
+
 CEPGP_Info = {
 	DistTarget =				"",
 	Mode =						"guild",	
@@ -174,7 +206,7 @@ CEPGP_Info = {
 		Source =				""
 	},
 	Version = 					{
-		Number =				"1.13.7",
+		Number =				"1.14.0 mod",
 		Build =					"Release",
 		List =					{
 		},
